@@ -1,0 +1,5 @@
+{% extends 'AMAdminBundle::layout.html.twig' %}
+{% block body %}
+    <h1>Editing {{ app.user.username }}'s profile</h1>
+    {{ form(edit_form) }}
+{% endblock %}

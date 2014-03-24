@@ -1,0 +1,52 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Music</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ entity.title }}</td>
+            </tr>
+            <tr>
+                <th>Album</th>
+                <td>{{ entity.album }}</td>
+            </tr>
+            <tr>
+                <th>Coverpath</th>
+                <td>{{ entity.coverPath }}</td>
+            </tr>
+            <tr>
+                <th>Style</th>
+                <td>{{ entity.style }}</td>
+            </tr>
+            <tr>
+                <th>Path</th>
+                <td>{{ entity.path }}</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>{{ entity.duration }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('music') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('music_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

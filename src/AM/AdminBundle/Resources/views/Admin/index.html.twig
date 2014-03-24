@@ -1,0 +1,6 @@
+{% extends 'AMAdminBundle::layout.html.twig' %}
+{% block body %}
+    Welcome on Admin {{ app.user.username }} !
+    <a href="{{ path('admin_logout') }}">logout</a> <br />
+    <a href="{{ path('admin_profile_edit', { id : app.user.id }) }}">Edit my profile</a>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'AMAdminBundle::layout.html.twig' %}
+{% block body %}
+    <h1>Welcome on {{ entity.username }}'s profile!</h1>
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div class="flash-notice">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    Role(s) :
+    {% for role in entity.roles %}
+        {{ role }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+    <br />
+    Enabled : {{ entity.enabled ? 'true' : 'false' }}. <br/>
+
+    {% if app.user.id == entity.id %}
+        <a href="{{ path('admin_profile_edit', { 'id': entity.id }) }}">edit my profile</a>
+    {% endif %}
+{% endblock %}
