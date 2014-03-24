@@ -1,0 +1,50 @@
+security:
+    encoders:
+        AM\AdminBundle\Entity\Administrator: sha512
+
+    role_hierarchy:
+        ROLE_ADMIN:       [ROLE_USER, ROLE_MODERATOR]
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_MODERATOR]
+
+    providers:
+        admin_users:
+            entity: { class: AM\AdminBundle\Entity\Administrator, property: username }
+
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        admin_area:
+            pattern: ^/admin
+            anonymous: true
+            provider: admin_users
+            form_login:
+                login_path: admin_login
+                check_path: admin_login_check
+                default_target_path: admin_index
+            logout:
+                path: admin_logout
+                target: admin_login
+
+        login:
+            pattern:  ^/demo/secured/login$
+            security: false
+
+        secured_area:
+            pattern:    ^/demo/secured/
+            form_login:
+                check_path: _security_check
+                login_path: _demo_login
+            logout:
+                path:   _demo_logout
+                target: _demo
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
+
+    access_control:
+        - { path: ^/admin/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login_check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }

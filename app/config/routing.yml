@@ -1,0 +1,16 @@
+am_admin:
+    resource: "@AMAdminBundle/Controller"
+    prefix:   /admin
+    type: annotation
+
+am_site:
+    resource: "@AMSiteBundle/Controller"
+    prefix:   /
+    type: annotation
+
+am_music:
+    resource: "@AMMusicBundle/Controller"
+    prefix:   /
+    type: annotation
+
+
