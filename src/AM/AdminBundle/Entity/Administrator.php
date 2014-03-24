@@ -59,6 +59,7 @@ class Administrator implements AdvancedUserInterface
 
     /**
      * @ORM\Column(type="array")
+     * @Assert\Count(min=1)
      */
     protected $roles;
 
