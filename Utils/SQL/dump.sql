@@ -1,1 +1,2 @@
 -- This file will contains a dump of the application databse + some data
+-- empty line
