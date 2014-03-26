@@ -2,15 +2,25 @@
 {% block body %}
     <h2>Administrator liste : </h2><br />
 
-    {% for entity in entities %}
-        <tr>
-          <td>{{ entity.username }}</td>
-          <td>{% for role in entity.roles %} {{ role }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
-          {% if is_granted('ROLE_SUPER_ADMIN') %}
-            <td><a href="{{ path('admin_profile_edit', {id : entity.id}) }}">edit</a></td>
-          {% endif %}
-        </tr>
-        <br />
-    {% endfor %}
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <td><strong>Username</strong></td>
+                <td><strong>Roles</strong></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+              <td>{{ entity.username }}</td>
+              <td>{% for role in entity.roles %} {{ role }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
+              {% if is_granted('ROLE_SUPER_ADMIN') %}
+                <td><a class="btn btn-default btn-xs" href="{{ path('admin_profile_edit', {id : entity.id}) }}">edit</a></td>
+              {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     <br />
 {% endblock %}

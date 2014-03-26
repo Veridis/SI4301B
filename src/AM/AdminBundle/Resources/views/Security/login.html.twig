@@ -1,23 +1,22 @@
 {% extends 'AMAdminBundle::layout.html.twig' %}
 {% block body %}
+    <div class="well">
     {% if app.user is null %}
         {% if error %}
             <div class="alert alert-error">{{ error.message }}</div>
         {% endif %}
-        <div class="well">
-            <form action="{{ path('admin_login_check') }}" method="post">
-                <label for="username">Login :</label>
-                <input type="text" id="username" name="_username" value="{{ last_username }}" />
-
-                <label for="password">Mot de passe :</label>
-                <input type="password" id="password" name="_password" />
-                <br />
-                <input type="submit" value="Connexion" />
-            </form>
-        </div>
+            <div class="container">
+                <form class ="form-signin" action="{{ path('admin_login_check') }}" method="post">
+                    <h2 class="form-signin-heading">Please sign in</h2>
+                    <input class="form-control" placeholder="Username" type="text" id="username" name="_username" value="{{ last_username }}" /><br />
+                    <input class="form-control" placeholder="Password" type="password" id="password" name="_password" />
+                    <br />
+                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Connexion" />
+                </form>
+            </div>
     {% else %}
-        You're already connected as {{ app.user.username }}.
-        <a href="{{ path('admin_index') }}">Return home</a>
+        <p>You're already connected as {{ app.user.username }}. <a href="{{ path('admin_index') }}">Return home</a> </p>
     {% endif %}
+    </div>
 {% endblock %}
 

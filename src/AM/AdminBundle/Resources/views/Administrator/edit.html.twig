@@ -2,6 +2,8 @@
 {% block body %}
     <h2>Editing {{ entity.username }}'s profile</h2>
     <div class="well">
-        {{ form(edit_form) }}
+        <div class="container">
+            {{ form(edit_form) }}
+        </div>
     </div>
 {% endblock %}
