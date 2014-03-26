@@ -1,6 +1,16 @@
 {% extends 'AMAdminBundle::layout.html.twig' %}
 {% block body %}
-    Welcome on Admin {{ app.user.username }} !
-    <a href="{{ path('admin_logout') }}">logout</a> <br />
-    <a href="{{ path('admin_profile_edit', { id : app.user.id }) }}">Edit my profile</a>
+    <h2>Administrator liste : </h2><br />
+
+    {% for entity in entities %}
+        <tr>
+          <td>{{ entity.username }}</td>
+          <td>{% for role in entity.roles %} {{ role }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
+          {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <td><a href="{{ path('admin_profile_edit', {id : entity.id}) }}">edit</a></td>
+          {% endif %}
+        </tr>
+        <br />
+    {% endfor %}
+    <br />
 {% endblock %}

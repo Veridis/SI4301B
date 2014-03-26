@@ -43,14 +43,17 @@ class AdministratorController extends Controller
         );
     }
 
+
     /**
      * @Route("/{id}/edit", requirements={"id" = "\d+"}, name = "admin_profile_edit")
      * @Template()
      */
     public function editAction($id)
     {
-        if($this->getUser()->getId() != $id) {
-            throw new AccessDeniedException('You are not allowed to access this page');
+        if(!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            if($this->getUser()->getId() != $id) {
+                throw new AccessDeniedException('You are not allowed to access this page');
+            }
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -69,7 +72,7 @@ class AdministratorController extends Controller
 
     }
 
-    public function createEditForm(Administrator $entity)
+    private function createEditForm(Administrator $entity)
     {
         $form = $this->createForm(new AdministratorType(), $entity, array(
             'action' => $this->generateUrl('admin_profile_update', array('id' => $entity->getId())),
@@ -99,11 +102,15 @@ class AdministratorController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
+        //var_dump($editForm->get('roles')->getData());
+        //die();
+
         if ($editForm->isValid()) {
             $factory = $this->get('security.encoder_factory');
             $encoder = $factory->getEncoder($entity);
             $password = $encoder->encodePassword($entity->getPlainPassword(), $entity->getSalt());
             $entity->setPassword($password);
+            $entity->eraseCredentials();
 
             $em->flush();
 
@@ -119,8 +126,67 @@ class AdministratorController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
         );
+    }
 
+    /**
+     * @Route("/create", name="admin_create")
+     * @Method("POST")
+     * @Template("AMAdminBundle:Administrator:new.html.twig")
+     */
+    public function createAction(Request $request)
+    {
+        $entity = new Administrator();
+        $form = $this->createCreateForm($entity);
+        $form->handleRequest($request);
 
+        if ($form->isValid()) {
+            $factory = $this->get('security.encoder_factory');
+            $encoder = $factory->getEncoder($entity);
+            $encodedPassword = $encoder->encodePassword($entity->getPlainPassword(), $entity->getSalt());
+            $entity->setPassword($encodedPassword);
+            $entity->eraseCredentials();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('admin_profile', array('id' => $entity->getId())));
+        }
+        return array(
+            'entity' => $entity,
+            'create_form'   => $form->createView(),
+        );
+    }
+
+    public function createCreateForm(Administrator $entity)
+    {
+        $form = $this->createForm(new AdministratorType(), $entity, array(
+            'action' => $this->generateUrl('admin_create'),
+            'method' => 'POST',
+        ));
+        $form->add('username', 'text', array('disabled' => false));
+        $form->add('submit', 'submit', array('label' => 'Create'));
+
+        return $form;
+    }
+
+    /**
+     * @Route("/new", name="admin_new")
+     * @Method("GET")
+     * @Template()
+     */
+    public function newAction()
+    {
+        if(!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            throw new AccessDeniedException('You are not allowed to access this page');
+        }
+        $entity = new Administrator();
+        $form = $this->createCreateForm($entity);
+
+        return array(
+            'entity' => $entity,
+            'create_form'   => $form->createView(),
+        );
     }
 
 } 

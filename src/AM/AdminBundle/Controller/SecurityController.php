@@ -8,6 +8,7 @@
 
 namespace AM\AdminBundle\Controller;
 
+use AM\AdminBundle\Entity\Administrator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

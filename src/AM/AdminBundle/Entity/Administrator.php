@@ -59,7 +59,6 @@ class Administrator implements AdvancedUserInterface
 
     /**
      * @ORM\Column(type="array")
-     * @Assert\Count(min=1)
      */
     protected $roles;
 
@@ -230,7 +229,7 @@ class Administrator implements AdvancedUserInterface
     }
     public function eraseCredentials()
     {
-
+        $this->plainPassword = null;
     }
 
     public static function getExistingRoles()
@@ -238,7 +237,6 @@ class Administrator implements AdvancedUserInterface
         return array(
             self::ROLE_SUPER_ADMIN => 'Super Administrator',
             self::ROLE_ADMIN => 'Administrator',
-            self::ROLE_MODERATOR => 'Moderator',
         );
     }
 }

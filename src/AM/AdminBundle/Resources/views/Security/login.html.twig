@@ -4,15 +4,17 @@
         {% if error %}
             <div class="alert alert-error">{{ error.message }}</div>
         {% endif %}
-        <form action="{{ path('admin_login_check') }}" method="post">
-            <label for="username">Login :</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}" />
+        <div class="well">
+            <form action="{{ path('admin_login_check') }}" method="post">
+                <label for="username">Login :</label>
+                <input type="text" id="username" name="_username" value="{{ last_username }}" />
 
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="_password" />
-            <br />
-            <input type="submit" value="Connexion" />
-        </form>
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="_password" />
+                <br />
+                <input type="submit" value="Connexion" />
+            </form>
+        </div>
     {% else %}
         You're already connected as {{ app.user.username }}.
         <a href="{{ path('admin_index') }}">Return home</a>
