@@ -2,46 +2,39 @@
 /**
  * Created by PhpStorm.
  * User: alex
- * Date: 16/02/14
- * Time: 15:33
+ * Date: 27/03/14
+ * Time: 12:10
  */
 
-namespace AM\SiteBundle\Form;
+namespace AM\UserBundle\Form;
 
+use AM\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class CommentType {
-
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
+class UserType extends AbstractType
+{
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('author')
-            ->add('comment')
+            ->add('username', 'text')
+            ->add('plainPassword', 'repeated', array(
+                'type' => 'password'
+            ))
+            ->add('email', 'email')
         ;
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AM\SiteBundle\Entity\Comment'
+            'data_class' => 'AM\UserBundle\Entity\User'
         ));
     }
 
-    /**
-     * @return string
-     */
     public function getName()
     {
-        return 'am_sitebundle_comment';
+        return 'am_userbundle_user';
     }
-
 } 

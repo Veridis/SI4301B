@@ -1,0 +1,9 @@
+{% extends 'AMUserBundle::layout.html.twig' %}
+{% block body %}
+    <h2>Edit {{ user.username }}'s profile</h2>
+    <div class="well">
+        <div class="container">
+            {{ form(edit_form) }}
+        </div>
+    </div>
+{% endblock %}

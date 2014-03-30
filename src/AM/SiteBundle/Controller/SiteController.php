@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class SiteController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="site_home")
      * @Template()
      */
     public function siteAction()

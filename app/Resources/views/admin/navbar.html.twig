@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs">
+    <li {% if app.request.attributes.get('_route') == 'admin_index' %}class="active"{% endif %}><a href="{{ path('admin_index') }}">Home</a></li>
+    {% if  app.user %}
+        <li {% if app.request.attributes.get('_route') == 'admin_profile_edit' %}class="active"{% endif %}><a href="{{ path('admin_profile_edit', { 'id' : app.user.id }) }}">Edit my profile</a></li>
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <li {% if app.request.attributes.get('_route') == 'admin_new' %}class="active"{% endif %}><a href="{{ path('admin_new') }}">Create new Administrator</a></li>
+        {% endif %}
+        <li {% if app.request.attributes.get('_route') == 'admin_logout' %}class="active"{% endif %}><a href="{{ path('admin_logout') }}">logout</a></li>
+    {% endif %}
+</ul>

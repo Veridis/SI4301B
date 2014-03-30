@@ -1,12 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: alex
- * Date: 02/03/14
- * Time: 19:13
- */
 
-namespace AM\AdminBundle\Entity;
+namespace AM\UserBundle\Entity;
+
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,11 +13,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Administrator implements AdvancedUserInterface
+class User implements AdvancedUserInterface
 {
-    const ROLE_ADMIN = 'ROLE_ADMIN';
-    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_MODERATOR = 'ROLE_MODERATOR';
     /**
      * @var integer
      *
@@ -57,6 +52,12 @@ class Administrator implements AdvancedUserInterface
     protected $salt;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Email()
+     */
+    protected $email;
+
+    /**
      * @ORM\Column(type="array")
      */
     protected $roles;
@@ -78,10 +79,17 @@ class Administrator implements AdvancedUserInterface
      */
     protected $credentialsNonExpired;
 
+    /*
+    protected $musics;
+
+    protected $favoriteMusics;
+
+    protected $playlists;
+    */
     public function __construct()
     {
         $this->salt = uniqid();
-        $this->roles = array(self::ROLE_ADMIN);
+        $this->roles = array(self::ROLE_USER);
         $this->enabled = $this->accountNonLocked = $this->accountNonExpired = $this->credentialsNonExpired = true;
     }
 
@@ -139,11 +147,22 @@ class Administrator implements AdvancedUserInterface
         return $this;
     }
 
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getRoles()
     {
         $roles = $this->roles;
 
-        $roles[] = self::ROLE_ADMIN;
+        $roles[] = self::ROLE_USER;
 
         return array_unique($roles);
     }
@@ -234,8 +253,9 @@ class Administrator implements AdvancedUserInterface
     public static function getExistingRoles()
     {
         return array(
-            self::ROLE_SUPER_ADMIN => 'Super Administrator',
-            self::ROLE_ADMIN => 'Administrator',
+            self::ROLE_USER => 'user',
+            self::ROLE_MODERATOR => 'moderator',
         );
     }
-}
+
+} 

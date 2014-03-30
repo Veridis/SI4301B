@@ -13,4 +13,8 @@ am_music:
     prefix:   /
     type: annotation
 
+am_user:
+    resource: "@AMUserBundle/Controller"
+    prefix:   /user
+    type: annotation
 

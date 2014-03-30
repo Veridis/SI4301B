@@ -102,15 +102,8 @@ class AdministratorController extends Controller
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
-        //var_dump($editForm->get('roles')->getData());
-        //die();
-
         if ($editForm->isValid()) {
-            $factory = $this->get('security.encoder_factory');
-            $encoder = $factory->getEncoder($entity);
-            $password = $encoder->encodePassword($entity->getPlainPassword(), $entity->getSalt());
-            $entity->setPassword($password);
-            $entity->eraseCredentials();
+            $this->setEncodedPassword($entity);
 
             $em->flush();
 
@@ -140,11 +133,7 @@ class AdministratorController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $factory = $this->get('security.encoder_factory');
-            $encoder = $factory->getEncoder($entity);
-            $encodedPassword = $encoder->encodePassword($entity->getPlainPassword(), $entity->getSalt());
-            $entity->setPassword($encodedPassword);
-            $entity->eraseCredentials();
+            $this->setEncodedPassword($entity);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -187,6 +176,16 @@ class AdministratorController extends Controller
             'entity' => $entity,
             'create_form'   => $form->createView(),
         );
+    }
+
+    private function setEncodedPassword($administrator)
+    {
+        $factory = $this->get('security.encoder_factory');
+        $encoder = $factory->getEncoder($administrator);
+
+        $encodedPassword = $encoder->encodePassword($administrator->getPlainPassword(), $administrator->getSalt());
+        $administrator->setPassword($encodedPassword);
+        $administrator->eraseCredentials();
     }
 
 } 

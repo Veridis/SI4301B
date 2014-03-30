@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new AM\SiteBundle\AMSiteBundle(),
             new AM\AdminBundle\AMAdminBundle(),
             new AM\MusicBundle\AMMusicBundle(),
+            new AM\UserBundle\AMUserBundle(),
 
         );
 

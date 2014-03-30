@@ -1,6 +1,7 @@
 security:
     encoders:
         AM\AdminBundle\Entity\Administrator: sha512
+        AM\UserBundle\Entity\User: sha512
 
     role_hierarchy:
         ROLE_MODERATOR:   [ROLE_USER]
@@ -9,6 +10,8 @@ security:
     providers:
         admin_users:
             entity: { class: AM\AdminBundle\Entity\Administrator, property: username }
+        users:
+            entity: { class: AM\UserBundle\Entity\User, property: username }
 
 
     firewalls:
@@ -28,23 +31,21 @@ security:
                 path: admin_logout
                 target: admin_login
 
-        login:
-            pattern:  ^/demo/secured/login$
-            security: false
-
-        secured_area:
-            pattern:    ^/demo/secured/
+        user_area:
+            pattern: ^/
+            anonymous: true
+            provider: users
             form_login:
-                check_path: _security_check
-                login_path: _demo_login
+                login_path: user_login
+                check_path: user_login_check
+                default_target_path: site_home
             logout:
-                path:   _demo_logout
-                target: _demo
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
+                path: user_logout
+                target: user_login
 
     access_control:
         - { path: ^/admin/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login_check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login_check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }

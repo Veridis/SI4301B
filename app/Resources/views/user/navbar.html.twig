@@ -1,0 +1,7 @@
+<ul class="nav nav-tabs">
+    <li {% if app.request.attributes.get('_route') == 'site_home' %}class="active"{% endif %}><a href="{{ path('site_home') }}">Home</a></li>
+    {% if  app.user %}
+        <li {% if app.request.attributes.get('_route') == 'user_show' %}class="active"{% endif %}><a href="{{ path('user_show', { 'id' : app.user.id }) }}">Profile</a></li>
+        <li {% if app.request.attributes.get('_route') == 'user_logout' %}class="active"{% endif %}><a href="{{ path('user_logout') }}">logout</a></li>
+    {% endif %}
+</ul>

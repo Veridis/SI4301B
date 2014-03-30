@@ -1,4 +1,4 @@
-{% extends 'AMAdminBundle::layout.html.twig' %}
+{% extends 'AMUserBundle::layout.html.twig' %}
 {% block body %}
     <div class="well">
         {% if app.user is null %}
@@ -6,7 +6,7 @@
                 <div class="alert alert-error">{{ error.message }}</div>
             {% endif %}
                 <div class="container">
-                    <form class ="form-signin" action="{{ path('admin_login_check') }}" method="post">
+                    <form class ="form-signin" action="{{ path('user_login_check') }}" method="post">
                         <h2 class="form-signin-heading">Please sign in </h2>
                         <input class="form-control" placeholder="Username" type="text" id="username" name="_username" value="{{ last_username }}" /><br />
                         <input class="form-control" placeholder="Password" type="password" id="password" name="_password" />
@@ -15,7 +15,7 @@
                     </form>
                 </div>
         {% else %}
-            <p>You're already connected as {{ app.user.username }}. <a href="{{ path('admin_index') }}">Return home</a> </p>
+            <p>You're already connected as {{ app.user.username }}. <a href="{{ path('user_home') }}">Return home</a> </p>
         {% endif %}
     </div>
 {% endblock %}

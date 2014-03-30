@@ -27,10 +27,6 @@ class AdminController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository("AMAdminBundle:Administrator")->findAll();
 
-        if (!$entities) {
-            throw $this->createNotFoundException('Unable to find Administrator entity.');
-        }
-
         return array(
             'entities' => $entities,
         );
