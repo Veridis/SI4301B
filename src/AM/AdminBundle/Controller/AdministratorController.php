@@ -78,8 +78,10 @@ class AdministratorController extends Controller
             'action' => $this->generateUrl('admin_profile_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
-
         $form->add('submit', 'submit', array('label' => 'Update'));
+        if(!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+            $form->remove('roles');
+        }
 
         return $form;
     }
