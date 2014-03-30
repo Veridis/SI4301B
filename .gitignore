@@ -6,6 +6,5 @@
 .DS_Store
 /.idea/*
 /TODO
-/composer.phar
 /web/bundles
 /README.md

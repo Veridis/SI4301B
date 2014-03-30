@@ -127,9 +127,4 @@ class Music
     {
         return $this->title;
     }
-
-
-
-
-
 } 

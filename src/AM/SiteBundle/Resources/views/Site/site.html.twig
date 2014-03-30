@@ -5,21 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    {% if app.user %}
-        {% include ':user:navbar.html.twig' %}
-    {% endif %}
+    {% include ':user:navbar.html.twig' %}
     <div class="container">
         <div class="header">
-            <ul class="nav nav-pills pull-right">
-                <li><a href="{{ path('site_home') }}">Home</a></li>
-                {% if not app.user %}
-                <li><a href="{{ path('user_new') }}">Register</a></li>
-                <li><a href="{{ path('user_login') }}">Sign in</a></li>
-                {% else %}
-                <li><a href="{{ path('user_show', { 'id' : app.user.id }) }}">{{ app.user.username }}</a></li>
-                <li><a href="{{ path('user_logout') }}">logout</a></li>
-                {% endif %}
-            </ul>
             <h3 class="text-muted">AtoMusic</h3>
         </div>
 
