@@ -238,4 +238,44 @@ class Administrator implements AdvancedUserInterface
             self::ROLE_ADMIN => 'Administrator',
         );
     }
+
+    /**
+     * Get enabled
+     *
+     * @return boolean 
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Get accountNonLocked
+     *
+     * @return boolean 
+     */
+    public function getAccountNonLocked()
+    {
+        return $this->accountNonLocked;
+    }
+
+    /**
+     * Get accountNonExpired
+     *
+     * @return boolean 
+     */
+    public function getAccountNonExpired()
+    {
+        return $this->accountNonExpired;
+    }
+
+    /**
+     * Get credentialsNonExpired
+     *
+     * @return boolean 
+     */
+    public function getCredentialsNonExpired()
+    {
+        return $this->credentialsNonExpired;
+    }
 }

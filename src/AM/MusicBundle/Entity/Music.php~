@@ -2,12 +2,11 @@
 
 namespace AM\MusicBundle\Entity;
 
-use AM\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AM\MusicBundle\Repository\MusicRepository")
+ * @ORM\Entity
  */
 class Music
 {
@@ -19,7 +18,7 @@ class Music
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\AM\UserBundle\Entity\User", inversedBy="musics")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="musics")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -50,21 +49,11 @@ class Music
     protected $path;
 
     /**
-     * time in seconds
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="time", options={"widget":"single_text", "with_seconds":true})
      */
     protected $duration;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    protected $uploadedAt;
 
-
-    public function __construct()
-    {
-        $this->uploadedAt = new \DateTime('now');
-    }
     public function setAlbum($album)
     {
         $this->album = $album;
@@ -144,34 +133,4 @@ class Music
     {
         return $this->title;
     }
-
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-        $user->addMusic($this);
-
-        return $this;
-    }
-
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    public function setUploadedAt($uploadedAt)
-    {
-        $this->uploadedAt = $uploadedAt;
-
-        return $this;
-    }
-
-    public function getUploadedAt()
-    {
-        return $this->uploadedAt;
-    }
-
-
-
-
-
-}
+} 

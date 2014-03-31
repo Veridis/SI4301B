@@ -14,9 +14,10 @@
         <div class="jumbotron">
             <h1>AtoMusic</h1>
             <p class="lead">Introduce your music to the world.</p>
-            {% if not app.user %}
+            {% if not app.user is not null %}
                 <p><a class="btn btn-lg btn-success" href="{{ path('user_new') }}">Register</a><a class="btn btn-lg btn-success" href="{{ path('user_login') }}">Sign in</a></p>
             {% endif %}
         </div>
+        <img src="{{ asset('/AM/web/img/default_cover.jpg') }}" class="cover-size" />
     </div>
 {% endblock %}

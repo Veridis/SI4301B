@@ -2,6 +2,7 @@
 
 namespace AM\MusicBundle\Controller;
 
+use AM\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -12,8 +13,6 @@ use AM\MusicBundle\Form\MusicType;
 
 /**
  * Music controller.
- *
- * @Route("/music")
  */
 class MusicController extends Controller
 {
@@ -21,7 +20,7 @@ class MusicController extends Controller
     /**
      * Lists all Music entities.
      *
-     * @Route("/", name="music")
+     * @Route("/musics", name="musics")
      * @Method("GET")
      * @Template()
      */
@@ -29,35 +28,61 @@ class MusicController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('AMMusicBundle:Music')->findAll();
+        $musics = $em->getRepository('AMMusicBundle:Music')->findAllByDateWithUser();
 
         return array(
-            'entities' => $entities,
+            'musics' => $musics,
         );
     }
+
+
+    /**
+     * Lists all Music entities for connected user.
+     *
+     * @Route("/mymusics", name="mymusics")
+     * @Method("GET")
+     * @Template()
+     */
+    public function userMusicAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userMusics = $em->getRepository('AMMusicBundle:Music')->findAllUserMusics($this->getUser()->getId());
+
+        return array(
+            'userMusics' => $userMusics,
+        );
+    }
+
+
     /**
      * Creates a new Music entity.
      *
-     * @Route("/", name="music_create")
+     * @Route("mymusic/add", name="music_create")
      * @Method("POST")
      * @Template("AMMusicBundle:Music:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity = new Music();
-        $form = $this->createCreateForm($entity);
+        $music = new Music();
+        $form = $this->createCreateForm($music);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+
+            $user = $this->getUser();
+            if(!($user instanceof User)) {
+                throw new \Exception('The User is not valid.');
+            }
+            $music->setUser($user);
+            $em->persist($music);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('music_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('music_show', array('id' => $music->getId())));
         }
 
         return array(
-            'entity' => $entity,
+            'music' => $music,
             'form'   => $form->createView(),
         );
     }
@@ -84,17 +109,17 @@ class MusicController extends Controller
     /**
      * Displays a form to create a new Music entity.
      *
-     * @Route("/new", name="music_new")
+     * @Route("mymusic/add", name="music_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new Music();
-        $form   = $this->createCreateForm($entity);
+        $music = new Music();
+        $form   = $this->createCreateForm($music);
 
         return array(
-            'entity' => $entity,
+            'music' => $music,
             'form'   => $form->createView(),
         );
     }

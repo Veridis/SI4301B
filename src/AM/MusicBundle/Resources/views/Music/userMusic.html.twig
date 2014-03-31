@@ -5,23 +5,21 @@
 
     <table class="records_list">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Artist</th>
-                <th>Title</th>
-                <th>Album</th>
-                <th>Coverpath</th>
-                <th>Style</th>
-                <th>Path</th>
-                <th>Duration</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Album</th>
+            <th>Coverpath</th>
+            <th>Style</th>
+            <th>Path</th>
+            <th>Duration</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
-        {% for music in musics %}
+        {% for music in userMusics %}
             <tr>
                 <td><a href="{{ path('music_show', { 'id': music.id }) }}">{{ music.id }}</a></td>
-                <td>{{ music.user.username }}</td>
                 <td>{{ music.title }}</td>
                 <td>{{ music.album }}</td>
                 <td>{{ music.coverPath }}</td>
@@ -29,25 +27,25 @@
                 <td>{{ music.path }}</td>
                 <td>{{ music.duration }}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('music_show', { 'id': music.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('music_edit', { 'id': music.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    <ul>
+                        <li>
+                            <a href="{{ path('music_show', { 'id': music.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('music_edit', { 'id': music.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+    <ul>
         <li>
             <a href="{{ path('music_new') }}">
                 Create a new entry
             </a>
         </li>
     </ul>
-    {% endblock %}
+{% endblock %}
