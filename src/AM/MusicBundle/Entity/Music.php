@@ -4,6 +4,8 @@ namespace AM\MusicBundle\Entity;
 
 use AM\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Table()
@@ -37,17 +39,13 @@ class Music
     /**
      * @ORM\Column(type="string", length=255)
      */
-    protected $coverPath;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     protected $style;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\OneToOne(targetEntity="\AM\MusicBundle\Entity\MusicFiles", cascade={"persist"})
+     * @ORM\JoinColumn(name="musicfile_id", referencedColumnName="id")
      */
-    protected $path;
+    protected $musicFiles;
 
     /**
      * time in seconds
@@ -64,6 +62,7 @@ class Music
     public function __construct()
     {
         $this->uploadedAt = new \DateTime('now');
+        $this->musicFiles = new MusicFiles();
     }
     public function setAlbum($album)
     {
@@ -75,19 +74,6 @@ class Music
     public function getAlbum()
     {
         return $this->album;
-    }
-
-
-    public function setCoverPath($coverPath)
-    {
-        $this->coverPath = $coverPath;
-
-        return $this;
-    }
-
-    public function getCoverPath()
-    {
-        return $this->coverPath;
     }
 
     public function setDuration($duration)
@@ -112,20 +98,22 @@ class Music
         return $this->id;
     }
 
-    public function setPath($path)
+    public function setMusicFiles(MusicFiles $musicFiles)
     {
-        $this->path = $path;
+        $this->musicFiles = $musicFiles;
+
         return $this;
     }
 
-    public function getPath()
+    public function getMusicFiles()
     {
-        return $this->path;
+        return $this->musicFiles;
     }
 
     public function setStyle($style)
     {
         $this->style = $style;
+
         return $this;
     }
 
@@ -137,6 +125,7 @@ class Music
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 

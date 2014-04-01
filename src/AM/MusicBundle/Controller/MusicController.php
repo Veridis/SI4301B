@@ -2,6 +2,7 @@
 
 namespace AM\MusicBundle\Controller;
 
+use AM\MusicBundle\Entity\MusicFiles;
 use AM\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -75,12 +76,12 @@ class MusicController extends Controller
                 throw new \Exception('The User is not valid.');
             }
             $music->setUser($user);
+            $music->getMusicFiles()->upload();
             $em->persist($music);
             $em->flush();
 
             return $this->redirect($this->generateUrl('music_show', array('id' => $music->getId())));
         }
-
         return array(
             'music' => $music,
             'form'   => $form->createView(),
@@ -101,7 +102,7 @@ class MusicController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Upload'));
 
         return $form;
     }
