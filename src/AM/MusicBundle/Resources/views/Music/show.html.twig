@@ -6,8 +6,8 @@
     <table class="record_properties">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
+                <th>Artist</th>
+                <td>{{ entity.user.username }}</td>
             </tr>
             <tr>
                 <th>Title</th>
@@ -18,16 +18,8 @@
                 <td>{{ entity.album }}</td>
             </tr>
             <tr>
-                <th>Coverpath</th>
-                <td>{{ entity.coverPath }}</td>
-            </tr>
-            <tr>
                 <th>Style</th>
                 <td>{{ entity.style }}</td>
-            </tr>
-            <tr>
-                <th>Path</th>
-                <td>{{ entity.path }}</td>
             </tr>
             <tr>
                 <th>Duration</th>
@@ -38,7 +30,7 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('music') }}">
+        <a href="{{ path('musics') }}">
             Back to the list
         </a>
     </li>

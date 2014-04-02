@@ -115,7 +115,7 @@ class UserController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('am_user', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('site_home'));
         }
         return array(
             'entity' => $entity,

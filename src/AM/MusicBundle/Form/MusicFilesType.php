@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: alex
+ * Date: 01/04/14
+ * Time: 18:09
+ */
 
 namespace AM\MusicBundle\Form;
 
@@ -6,7 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class MusicType extends AbstractType
+class MusicFilesType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,22 +21,18 @@ class MusicType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('album')
-            ->add('style')
-            ->add('duration')
-            ->add('musicfiles', new MusicFilesType())
+            ->add('song')
+            ->add('cover')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AM\MusicBundle\Entity\Music',
-            'cascade_validation' => true,
+            'data_class' => 'AM\MusicBundle\Entity\MusicFiles'
         ));
     }
 
@@ -39,6 +41,6 @@ class MusicType extends AbstractType
      */
     public function getName()
     {
-        return 'am_musicbundle_music';
+        return 'am_musicbundle_musicfiles';
     }
-}
+} 

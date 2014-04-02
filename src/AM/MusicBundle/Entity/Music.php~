@@ -2,14 +2,11 @@
 
 namespace AM\MusicBundle\Entity;
 
-use AM\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-
 
 /**
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="AM\MusicBundle\Repository\MusicRepository")
+ * @ORM\Entity
  */
 class Music
 {
@@ -21,7 +18,7 @@ class Music
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\AM\UserBundle\Entity\User", inversedBy="musics")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="musics")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -39,31 +36,24 @@ class Music
     /**
      * @ORM\Column(type="string", length=255)
      */
+    protected $coverPath;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     protected $style;
 
     /**
-     * @ORM\OneToOne(targetEntity="\AM\MusicBundle\Entity\MusicFiles", cascade={"persist"})
-     * @ORM\JoinColumn(name="musicfile_id", referencedColumnName="id")
+     * @ORM\Column(type="string", length=255)
      */
-    protected $musicFiles;
+    protected $path;
 
     /**
-     * time in seconds
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="time", options={"widget":"single_text", "with_seconds":true})
      */
     protected $duration;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    protected $uploadedAt;
 
-
-    public function __construct()
-    {
-        $this->uploadedAt = new \DateTime('now');
-        $this->musicFiles = new MusicFiles();
-    }
     public function setAlbum($album)
     {
         $this->album = $album;
@@ -74,6 +64,19 @@ class Music
     public function getAlbum()
     {
         return $this->album;
+    }
+
+
+    public function setCoverPath($coverPath)
+    {
+        $this->coverPath = $coverPath;
+
+        return $this;
+    }
+
+    public function getCoverPath()
+    {
+        return $this->coverPath;
     }
 
     public function setDuration($duration)
@@ -98,22 +101,20 @@ class Music
         return $this->id;
     }
 
-    public function setMusicFiles(MusicFiles $musicFiles)
+    public function setPath($path)
     {
-        $this->musicFiles = $musicFiles;
-
+        $this->path = $path;
         return $this;
     }
 
-    public function getMusicFiles()
+    public function getPath()
     {
-        return $this->musicFiles;
+        return $this->path;
     }
 
     public function setStyle($style)
     {
         $this->style = $style;
-
         return $this;
     }
 
@@ -125,7 +126,6 @@ class Music
     public function setTitle($title)
     {
         $this->title = $title;
-
         return $this;
     }
 
@@ -133,34 +133,4 @@ class Music
     {
         return $this->title;
     }
-
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-        $user->addMusic($this);
-
-        return $this;
-    }
-
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    public function setUploadedAt($uploadedAt)
-    {
-        $this->uploadedAt = $uploadedAt;
-
-        return $this;
-    }
-
-    public function getUploadedAt()
-    {
-        return $this->uploadedAt;
-    }
-
-
-
-
-
-}
+} 

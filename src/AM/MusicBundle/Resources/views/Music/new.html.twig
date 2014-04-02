@@ -3,13 +3,21 @@
 {% block body -%}
     <h1>Music creation</h1>
 
-    {{ form(form) }}
+    <form action="{{ path('music_create') }}" method="POST" {{ form_enctype(form) }} >
+        {{ form_row(form.title) }}
+        {{ form_row(form.album) }}
+        {{ form_row(form.style) }}
+        {{ form_row(form.duration) }}
+        {{ form_row(form.musicfiles.song) }}
+        {{ form_row(form.musicfiles.cover) }}
+        {{ form_row(form.submit) }}
+        {{ form_rest(form) }}
+    </form>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('music') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('musics') }}">Back to the list</a>
+        </li>
+    </ul>
 {% endblock %}
