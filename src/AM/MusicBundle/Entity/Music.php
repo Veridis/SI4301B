@@ -28,6 +28,7 @@ class Music
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     protected $title;
 
@@ -38,6 +39,7 @@ class Music
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(max="20")
      */
     protected $style;
 
@@ -50,6 +52,7 @@ class Music
     /**
      * time in seconds
      * @ORM\Column(type="integer")
+     * @Assert\Type(type="integer")
      */
     protected $duration;
 

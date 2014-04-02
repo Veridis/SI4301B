@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends 'AMMusicBundle::layout.html.twig' %}
 
 {% block body -%}
     <h1>Music list</h1>
@@ -8,11 +8,9 @@
         <tr>
             <th>Id</th>
             <th>Title</th>
-            <th>Album</th>
-            <th>Coverpath</th>
             <th>Style</th>
-            <th>Path</th>
             <th>Duration</th>
+            <th>Cover</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -24,6 +22,7 @@
                 <td>{{ music.album }}</td>
                 <td>{{ music.style }}</td>
                 <td>{{ music.duration }}</td>
+                <td><img src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" class="cover-size"/></td>
                 <td>
                     <ul>
                         <li>
