@@ -4,8 +4,10 @@
         <meta charset="UTF-8" />
         <title>{% block title %}AM app!{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        {% stylesheets 'css/bootstrap.min.css' filter='cssrewrite' %}
-            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% stylesheets 'css/bootstrap.min.css'
+                        'css/style.css'
+            filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}
         {% block stylesheets %}{% endblock %}
     </head>
