@@ -10,6 +10,7 @@ namespace AM\MusicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Table()
@@ -25,12 +26,13 @@ class MusicFiles
     protected $id;
 
     /**
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(maxSize="250k")
+     * @Assert\Image(mimeTypes={"image/gif", "image/jpeg", "image/png"})
      */
     protected $cover;
 
     /**
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(maxSize="50M", mimeTypes={"audio/mpeg"})
      */
     protected $song;
 
@@ -40,9 +42,14 @@ class MusicFiles
     protected $songPath;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     protected $coverPath;
+
+    public function __construct()
+    {
+        $this->coverPath = 'default_cover.jpg';
+    }
 
     public function setCover($cover)
     {
@@ -147,11 +154,29 @@ class MusicFiles
         if (null === $this->song) {
             return;
         }
-        $name = uniqid();
-        $this->song->move($this->getSongUploadRootDir(), $name);
-        $this->cover->move($this->getCoverUploadDir(), $name);
-        $this->coverPath = $name;
-        $this->songPath = $name;
+        $id = uniqid();
+        $songExt = $this->song->guessExtension();
+        $songName = $id . '.' . $songExt;
+
+        if(!$songExt)
+        {
+            throw new \Exception('The extension is not valid.');
+        }
+
+        $this->song->move($this->getSongUploadRootDir(), $songName);
+        $this->songPath = $songName;
+
+        if($this->cover != null)
+        {
+            $coverExt = $this->cover->guessExtension();
+            $coverName = $id . '.' . $coverExt;
+            if(!$coverExt)
+            {
+                throw new \Exception('The extension is not valid.');
+            }
+            $this->cover->move($this->getCoverUploadDir(), $coverName);
+            $this->coverPath = $coverName;
+        }
 
         $this->song = null;
         $this->cover = null;
