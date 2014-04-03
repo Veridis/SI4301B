@@ -117,6 +117,10 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('site_home'));
         }
+        else{
+            var_dump($form->getErrors());
+            die();
+        }
         return array(
             'entity' => $entity,
             'create_form'   => $form->createView(),
@@ -129,7 +133,7 @@ class UserController extends Controller
             'action' => $this->generateUrl('user_create'),
             'method' => 'POST',
         ));
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        //$form->add('submit', 'submit', array('label' => 'Register'));
 
         return $form;
     }

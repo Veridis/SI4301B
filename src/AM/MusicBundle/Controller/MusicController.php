@@ -102,7 +102,7 @@ class MusicController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Upload'));
+        //$form->add('submit', 'submit', array('label' => 'Upload'));
 
         return $form;
     }
@@ -136,16 +136,16 @@ class MusicController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AMMusicBundle:Music')->find($id);
+        $music = $em->getRepository('AMMusicBundle:Music')->find($id);
 
-        if (!$entity) {
+        if (!$music) {
             throw $this->createNotFoundException('Unable to find Music entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $deleteForm = $this->createDeleteForm($music);
 
         return array(
-            'entity'      => $entity,
+            'music'      => $music,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -161,17 +161,17 @@ class MusicController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AMMusicBundle:Music')->find($id);
+        $music = $em->getRepository('AMMusicBundle:Music')->find($id);
 
-        if (!$entity) {
+        if (!$music) {
             throw $this->createNotFoundException('Unable to find Music entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEditForm($music);
+        $deleteForm = $this->createDeleteForm($music);
 
         return array(
-            'entity'      => $entity,
+            'music'      => $music,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
@@ -188,42 +188,44 @@ class MusicController extends Controller
     {
         $form = $this->createForm(new MusicType(), $entity, array(
             'action' => $this->generateUrl('music_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
+            'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        //$form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
     /**
      * Edits an existing Music entity.
      *
-     * @Route("/{id}", name="music_update")
-     * @Method("PUT")
+     * @Route("/edit/{id}", name="music_update")
+     * @Method("POST")
      * @Template("AMMusicBundle:Music:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('AMMusicBundle:Music')->find($id);
+        $music = $em->getRepository('AMMusicBundle:Music')->find($id);
 
-        if (!$entity) {
+        if (!$music) {
             throw $this->createNotFoundException('Unable to find Music entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $deleteForm = $this->createDeleteForm($music);
+        $editForm = $this->createEditForm($music);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $music->getMusicFiles()->removeFiles();
+            $music->getMusicFiles()->upload();
             $em->flush();
 
             return $this->redirect($this->generateUrl('music_edit', array('id' => $id)));
         }
 
         return array(
-            'entity'      => $entity,
+            'music'      => $music,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
@@ -231,43 +233,38 @@ class MusicController extends Controller
     /**
      * Deletes a Music entity.
      *
-     * @Route("/{id}", name="music_delete")
-     * @Method("DELETE")
+     * @Route("/delete/{id}", name="music_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
+        $em = $this->getDoctrine()->getManager();
+        $music = $em->getRepository('AMMusicBundle:Music')->find($id);
+
+        $form = $this->createDeleteForm($music);
         $form->handleRequest($request);
+        $music->getMusicFiles()->removeFiles();
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('AMMusicBundle:Music')->find($id);
+        $em->remove($music);
+        $em->flush();
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Music entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('music'));
+        return $this->redirect($this->generateUrl('mymusics'));
     }
 
-    /**
-     * Creates a form to delete a Music entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
+    private function createDeleteForm(Music $entity)
     {
-        return $this->createFormBuilder()
+        $form = $this->createForm(new MusicType(), $entity, array(
+            'action' => $this->generateUrl('music_delete', array('id' => $entity->getId())),
+            'method' => 'POST',
+        ));
+
+        return $form;
+
+     /*   return $this->createFormBuilder()
             ->setAction($this->generateUrl('music_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
-        ;
+        ;*/
     }
 }

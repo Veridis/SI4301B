@@ -44,7 +44,7 @@ class Music
     protected $style;
 
     /**
-     * @ORM\OneToOne(targetEntity="\AM\MusicBundle\Entity\MusicFiles", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="\AM\MusicBundle\Entity\MusicFiles", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="musicfile_id", referencedColumnName="id")
      */
     protected $musicFiles;
@@ -52,7 +52,7 @@ class Music
     /**
      * time in seconds
      * @ORM\Column(type="integer")
-     * @Assert\Type(type="integer")
+     * @Assert\Type(type="integer", message="The value {{ value }} is not an {{ type }}.")
      */
     protected $duration;
 
@@ -162,8 +162,8 @@ class Music
         return $this->uploadedAt;
     }
 
-
-
-
-
+    public function convertDuration()
+    {
+        return gmdate('i:s', $this->getDuration());
+    }
 }

@@ -21,8 +21,11 @@ class MusicFilesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('song')
-            ->add('cover')
+            ->add('song', 'file', array(
+            ))
+            ->add('cover', 'file', array(
+                'required' => 'false',
+            ))
         ;
     }
 

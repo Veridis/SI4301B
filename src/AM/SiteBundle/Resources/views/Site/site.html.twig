@@ -5,18 +5,25 @@
 {% endblock %}
 
 {% block body %}
-    {% include ':user:navbar.html.twig' %}
     <div class="container">
         <div class="header">
             <h3 class="text-muted">AtoMusic</h3>
         </div>
-
         <div class="jumbotron">
             <h1>AtoMusic</h1>
             <p class="lead">Introduce your music to the world.</p>
             {% if not app.user is not null %}
-                <p><a class="btn btn-lg btn-success" href="{{ path('user_new') }}">Register</a><a class="btn btn-lg btn-success" href="{{ path('user_login') }}">Sign in</a></p>
+                <div class="row">
+                    <div class="col-md-1">
+                        <a class="btn btn-lg btn-info" href="{{ path('user_new') }}">Register</a>
+                    </div>
+                    <div class="col-md-1 col-md-offset-1">
+                        <a class="btn btn-lg btn-info" href="{{ path('user_login') }}">Sign in</a>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>
+    {% block searchResult %}
+    {% endblock %}
 {% endblock %}

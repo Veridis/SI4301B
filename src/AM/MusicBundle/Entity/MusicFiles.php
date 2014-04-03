@@ -33,6 +33,7 @@ class MusicFiles
 
     /**
      * @Assert\File(maxSize="50M", mimeTypes={"audio/mpeg"})
+     * @Assert\NotBlank()
      */
     protected $song;
 
@@ -48,7 +49,7 @@ class MusicFiles
 
     public function __construct()
     {
-        $this->coverPath = 'default_cover.jpg';
+        $this->coverPath = 'default_cover.png';
     }
 
     public function setCover($cover)
@@ -180,6 +181,11 @@ class MusicFiles
 
         $this->song = null;
         $this->cover = null;
+    }
+
+    public function removeFiles()
+    {
+
     }
 
 } 

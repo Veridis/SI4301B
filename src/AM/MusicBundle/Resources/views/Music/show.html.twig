@@ -1,44 +1,30 @@
-{% extends '::base.html.twig' %}
+{% extends 'AMMusicBundle::layout.html.twig' %}
+{% block body %}
+    <div class="container">
 
-{% block body -%}
-    <h1>Music</h1>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="thumbnail">
+                    <img class="media-object big-cover-size img-circle" src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" />
+                    <div class="caption text-center">
+                        <h3 class="media-heading">{{ music.title|title }} - <em>{{ music.user.username }}</em> <small>({{ music.convertDuration() }})</small></h3>
+                        <p>
+                            From <strong><small>{{ music.album|upper }}</small></strong> album. <br />
+                            <span class="label label-info">{{ music.style }}</span>
+                        </p><br />
+                        <p class="text-center">
+                            <a class="btn btn-info" href="" title="Add to Favs"><span class="glyphicon glyphicon-heart"></span> Add to Favs</a>
+                            <a class="btn btn-info" href="" title="Add to playlist"><span class="glyphicon glyphicon-th-list"></span> Add to Playlist</a>
+                        </p>
+                    </div>
+                    <p class="text-center">
+                        <audio controls autoplay>
+                            <source src="{{ asset('uploads/musics/songs/') }}{{ music.musicFiles.songPath }}"> </source>
+                        </audio>
+                    </p>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Artist</th>
-                <td>{{ entity.user.username }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ entity.title }}</td>
-            </tr>
-            <tr>
-                <th>Album</th>
-                <td>{{ entity.album }}</td>
-            </tr>
-            <tr>
-                <th>Style</th>
-                <td>{{ entity.style }}</td>
-            </tr>
-            <tr>
-                <th>Duration</th>
-                <td>{{ entity.duration }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('musics') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('music_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

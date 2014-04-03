@@ -56,6 +56,7 @@ class User implements AdvancedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Email()
+     * @Assert\NotBlank()
      */
     protected $email;
 

@@ -1,16 +1,100 @@
-{% extends '::base.html.twig' %}
-
+{% extends 'AMMusicBundle::layout.html.twig' %}
 {% block body -%}
-    <h1>Music edit</h1>
 
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('music') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well">
+                    <form class ="form-horizontal" action="{{ path('music_update', {'id' : music.id}) }}" method="post" {{ form_enctype(edit_form) }}>
+                        <h2>Edditing {{ music.title }}</h2>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.title)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.title) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.title) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.title) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.album)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.album) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.album) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.album) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.style)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.style) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.style) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.style) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.duration)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.duration) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.duration) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.duration) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.musicfiles.song)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.musicfiles.song) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.musicfiles.song) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.musicfiles.song) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.musicfiles.cover)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.musicfiles.cover) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.musicfiles.cover) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.musicfiles.cover) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input class="btn btn-lg btn-warning btn-block" type="submit" value="update Music" />
+                            </div>
+                        </div>
+                        {{ form_rest(edit_form) }}
+                    </form>
+                    <form class ="form-horizontal" action="{{ path('music_delete', {'id' : music.id}) }}" method="post">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                            <input class="btn btn-lg btn-danger btn-block" type="submit" value="delete Music" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

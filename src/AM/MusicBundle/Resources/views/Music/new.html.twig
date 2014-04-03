@@ -1,23 +1,93 @@
-{% extends '::base.html.twig' %}
-
+{% extends 'AMMusicBundle::layout.html.twig' %}
 {% block body -%}
-    <h1>Music creation</h1>
 
-    <form action="{{ path('music_create') }}" method="POST" {{ form_enctype(form) }} >
-        {{ form_row(form.title) }}
-        {{ form_row(form.album) }}
-        {{ form_row(form.style) }}
-        {{ form_row(form.duration) }}
-        {{ form_row(form.musicfiles.song) }}
-        {{ form_row(form.musicfiles.cover) }}
-        {{ form_row(form.submit) }}
-        {{ form_rest(form) }}
-    </form>
-
-
-    <ul class="record_actions">
-        <li>
-            <a href="{{ path('musics') }}">Back to the list</a>
-        </li>
-    </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well">
+                    <form class ="form-horizontal" action="{{ path('music_create') }}" method="post" {{ form_enctype(form) }}>
+                        <h2>Adding a new music</h2>
+                        <div class="form-group">
+                            {% if form_errors(form.title)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(form.title) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(form.title) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(form.title) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(form.album)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(form.album) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(form.album) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(form.album) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(form.style)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(form.style) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(form.style) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(form.style) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(form.duration)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(form.duration) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(form.duration) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(form.duration) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(form.musicfiles.song)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(form.musicfiles.song) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(form.musicfiles.song) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(form.musicfiles.song) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(form.musicfiles.cover)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(form.musicfiles.cover) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(form.musicfiles.cover) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(form.musicfiles.cover) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input class="btn btn-lg btn-info btn-block" type="submit" value="Add Music" />
+                            </div>
+                        </div>
+                        {{ form_rest(form) }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

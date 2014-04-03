@@ -1,14 +1,27 @@
 {% extends 'AMUserBundle::layout.html.twig' %}
 {% block body %}
-    <h2>Welcome {{ user.username }}</h2>
-    {% for flashMessage in app.session.flashbag.get('notice') %}
-        <div class="alert alert-success alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{ flashMessage }}
+    <div class="container">
+        <div class="text-center">
+            <h2>Welcome {{ user.username }}</h2>
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+            <a class="btn btn-info" href="{{ path('mymusics', {'id' : user.id}) }}">My musics</a>
+            <a class="btn btn-warning" href="{{ path('user_edit', {'id': user.id }) }}">Edit my profile</a>
+            <a class="btn btn-danger" href="{{ path('user_logout') }}">logout</a>
         </div>
-    {% endfor %}
-    <li>
-        <ul>{{ user.email }}</ul>
-    </li>
-    <a href="{{ path('user_edit', {'id': user.id }) }}">edit my profile</a>
+
+        <div class="row">
+            {% for music in user.musics %}
+            <div class="col-xs-6 col-sm-4 col-md-3">
+                <a href="{{ path('music_show', {'id' : music.id}) }}">
+                    <img class="img-circle big-cover-size" src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" />
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
