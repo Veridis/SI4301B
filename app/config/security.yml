@@ -49,3 +49,4 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login_check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/mymusics, roles: ROLE_USER}

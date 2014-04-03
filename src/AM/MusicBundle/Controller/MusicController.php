@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AM\MusicBundle\Entity\Music;
 use AM\MusicBundle\Form\MusicType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Music controller.
@@ -110,7 +111,7 @@ class MusicController extends Controller
     /**
      * Displays a form to create a new Music entity.
      *
-     * @Route("mymusic/add", name="music_new")
+     * @Route("mymusics/add", name="music_new")
      * @Method("GET")
      * @Template()
      */
@@ -153,20 +154,24 @@ class MusicController extends Controller
     /**
      * Displays a form to edit an existing Music entity.
      *
-     * @Route("/{id}/edit", name="music_edit")
+     * @Route("/mymusics/edit/{id}", name="music_edit")
      * @Method("GET")
      * @Template()
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $music = $em->getRepository('AMMusicBundle:Music')->find($id);
 
+        if(!$this->getUser()){
+            throw $this->createNotFoundException('No user connected.');
+        }
         if (!$music) {
             throw $this->createNotFoundException('Unable to find Music entity.');
         }
-
+        if($this->getUser()->getId() != $music->getUser()->getId()) {
+            throw new AccessDeniedException('You are not allowed to access this page');
+        }
         $editForm = $this->createEditForm($music);
         $deleteForm = $this->createDeleteForm($music);
 
@@ -198,7 +203,7 @@ class MusicController extends Controller
     /**
      * Edits an existing Music entity.
      *
-     * @Route("/edit/{id}", name="music_update")
+     * @Route("/mymusics/edit/{id}", name="music_update")
      * @Method("POST")
      * @Template("AMMusicBundle:Music:edit.html.twig")
      */
@@ -233,7 +238,7 @@ class MusicController extends Controller
     /**
      * Deletes a Music entity.
      *
-     * @Route("/delete/{id}", name="music_delete")
+     * @Route("/mymusics/delete/{id}", name="music_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
@@ -259,12 +264,5 @@ class MusicController extends Controller
         ));
 
         return $form;
-
-     /*   return $this->createFormBuilder()
-            ->setAction($this->generateUrl('music_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;*/
     }
 }

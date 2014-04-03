@@ -34,12 +34,14 @@ class Music
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     protected $album;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max="20")
+     * @Assert\NotBlank()
      */
     protected $style;
 

@@ -1,22 +1,11 @@
 {% extends 'AMMusicBundle::layout.html.twig' %}
 {% block body %}
+
     <div class="container">
         <ul class="media-list">
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
-                    <h1>Musicss</h1><br />
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-7 col-md-offset-3">
-                    <ul class="nav nav-tabs">
-                        <li class="disabled"><a>Order by</a></li>
-                        <li {% if 'artist' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'artist'}) }}">Artist</a></li>
-                        <li {% if 'title' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'title'}) }}">Title</a></li>
-                        <li {% if 'album' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'album'}) }}">Album</a></li>
-                        <li {% if 'style' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'style'}) }}">Style</a></li>
-                        <li {% if 'duration' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'duration'}) }}">Duration</a></li>
-                    </ul>
+                    <h1>Result of research</h1><br />
                 </div>
             </div>
             {% for music in musics %}
@@ -49,3 +38,4 @@
         </ul>
     </div>
 {% endblock %}
+

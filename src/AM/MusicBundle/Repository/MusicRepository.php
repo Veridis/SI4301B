@@ -37,4 +37,61 @@ class MusicRepository extends EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function searchMusic($research)
+    {
+        $qb = $this->createQueryBuilder('music');
+
+        $qb->leftJoin('music.user', 'user')
+            ->where(
+                $qb->expr()->orX(
+                    $qb->expr()->like('user.username', ':research'),
+                    $qb->expr()->like('music.title', ':research'),
+                    $qb->expr()->like('music.style', ':research'),
+                    $qb->expr()->like('music.album', ':research')
+                )
+            )
+        ->setParameter('research', '%'.$research.'%');
+        return $qb->getQuery()->getResult();
+    }
+
+    public function orderMusicBy($order)
+    {
+        $qb = $this->createQueryBuilder('music');
+        //$orderBy = 'user.username';
+
+        switch($order)
+        {
+            case 'artist' :
+                $qb->leftJoin('music.user', 'user')
+                    ->orderBy('user.username', 'ASC');
+                //$orderBy = 'user.username';
+                break;
+            case 'title' :
+                $qb->leftJoin('music.user', 'user')
+                    ->orderBy('music.title', 'ASC');
+                //$orderBy = 'music.title';
+                break;
+            case 'album' :
+                $qb->leftJoin('music.user', 'user')
+                    ->orderBy('music.album', 'ASC');
+                //$orderBy = 'music.album';
+                break;
+            case 'style' :
+                $qb->leftJoin('music.user', 'user')
+                    ->orderBy('music.style', 'ASC');
+               // $orderBy = 'music.style';
+                break;
+            case 'duration' :
+                $qb->leftJoin('music.user', 'user')
+                    ->orderBy('music.duration', 'ASC');
+                //$orderBy = 'music.duration';
+                break;
+
+        }
+
+            //->setParameter('orderBy', $orderBy);
+
+        return $qb->getQuery()->getResult();
+    }
+
 } 

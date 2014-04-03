@@ -20,5 +20,28 @@ use AM\MusicBundle\Form\MusicType;
 
 class SearchController extends Controller
 {
-    
+    /**
+     * @Route("/search", name="music_search")
+     * @Method("POST")
+     * @Template()
+     */
+    public function searchAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $musics = $em->getRepository('AMMusicBundle:Music')->searchMusic($request->get('research'));
+        return array('musics' => $musics);
+    }
+
+    /**
+     * @Route("/musics/orderby/{order}", name="music_orderby")
+     * @Template("AMMusicBundle:Music:index.html.twig")
+     */
+    public function orderByAction($order)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $musics = $em->getRepository('AMMusicBundle:Music')->orderMusicBy($order);
+
+        return array('musics' => $musics);
+
+    }
 } 
