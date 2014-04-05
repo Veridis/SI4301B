@@ -42,25 +42,27 @@
                                    data-toggle="tooltip" data-placement="right" title="Play it!">
                                     <span class="glyphicon glyphicon-play"></span>
                                 </a><br/>
-                                {% if app.user.haveFav(music) == 1 %}
-                                <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
-                                    <button type="submit" class="btn btn-xs btn-danger tooltip-info"
-                                            data-toggle="tooltip" data-placement="right" title="remove from Favs">
-                                        <i class="glyphicon glyphicon-remove"></i>
-                                    </button>
-                                </form>
-                                {% else %}
-                                    <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
-                                        <button type="submit" class="btn btn-xs btn-info tooltip-info"
-                                                data-toggle="tooltip" data-placement="right" title="Add to Favs">
-                                            <i class="glyphicon glyphicon-heart"></i>
+                                {% if app.user %}
+                                    {% if app.user.haveFav(music) %}
+                                    <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
+                                        <button type="submit" class="btn btn-xs btn-danger tooltip-info"
+                                                data-toggle="tooltip" data-placement="right" title="remove from Favs">
+                                            <i class="glyphicon glyphicon-remove"></i>
                                         </button>
                                     </form>
+                                    {% else %}
+                                        <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
+                                            <button type="submit" class="btn btn-xs btn-info tooltip-info"
+                                                    data-toggle="tooltip" data-placement="right" title="Add to Favs">
+                                                <i class="glyphicon glyphicon-heart"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                    <a class="btn btn-xs btn-info tooltip-info" href=""
+                                       data-toggle="tooltip" data-placement="right" title="Add to playlist">
+                                        <span class="glyphicon glyphicon-th-list"></span>
+                                    </a>
                                 {% endif %}
-                                <a class="btn btn-xs btn-info tooltip-info" href=""
-                                   data-toggle="tooltip" data-placement="right" title="Add to playlist">
-                                    <span class="glyphicon glyphicon-th-list"></span>
-                                </a>
                                 <br/>
                             </div>
                         </div>

@@ -3,13 +3,15 @@
     <div class="container">
         <div class="text-center">
             <h2>Welcome on {{ user.username }}'s profile</h2>
-            {% if user.id == app.user.id %}
-                <a class="btn btn-info" href="{{ path('mymusics') }}">My musics</a>
-                <a class="btn btn-warning" href="{{ path('user_edit', {'id': user.id }) }}">Edit my profile</a>
-                <a class="btn btn-danger" href="{{ path('user_logout') }}">logout</a>
+            {% if app.user %}
+                {% if user.id == app.user.id %}
+                    <a class="btn btn-info" href="{{ path('mymusics') }}">My musics</a>
+                    <a class="btn btn-warning" href="{{ path('user_edit', {'id': user.id }) }}">Edit my profile</a>
+                    <a class="btn btn-danger" href="{{ path('user_logout') }}">logout</a>
+                {% endif %}
             {% endif %}
         </div>
-
+        <br />
         <div class="row">
             {% for music in user.musics %}
             <div class="col-xs-6 col-sm-4 col-md-3">

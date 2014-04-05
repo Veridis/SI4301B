@@ -119,7 +119,7 @@ class MusicController extends Controller
     /**
      * Finds and displays a Music entity.
      *
-     * @Route("/{id}", name="music_show")
+     * @Route("/{id}", requirements={"id" = "\d+"}, name="music_show")
      * @Method({"GET", "POST"})
      * @Template()
      */

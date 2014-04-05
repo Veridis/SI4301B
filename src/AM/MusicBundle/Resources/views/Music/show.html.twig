@@ -13,31 +13,34 @@
                             From <strong><small>{{ music.album|upper }}</small></strong> album. <br />
                             <span class="label label-info">{{ music.style }}</span>
                         </p><br />
-                        <div class="row">
-                            <div class="col-md-2 col-md-offset-2">
-                                {% if app.user.haveFav(music) %}
-                                    <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
-                                        <button type="submit" class="btn btn btn-danger">
-                                            <span class="glyphicon glyphicon-remove"></Span>  Remove from favs
-                                        </button>
-                                    </form>
-                                {% else %}
-                                    <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
+                        {% if app.user %}
+                            <div class="row">
+                                <div class="col-md-2 col-md-offset-2">
+                                    {% if app.user.haveFav(music) %}
+                                        <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
+                                            <button type="submit" class="btn btn btn-danger">
+                                                <span class="glyphicon glyphicon-remove"></Span>  Remove from favs
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
+                                            <button type="submit" class="btn btn btn-info">
+                                                <span class="glyphicon glyphicon-heart"></Span> Add to favs
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-2 col-md-offset-2">
+                                    <form class="form-inline">
                                         <button type="submit" class="btn btn btn-info">
-                                            <span class="glyphicon glyphicon-heart"></Span> Add to favs
+                                            <span class="glyphicon glyphicon-th-list"></span> Add to Playlist
                                         </button>
                                     </form>
-                                {% endif %}
-                            </div>
-                            <div class="col-md-2 col-md-offset-2">
-                                <form class="form-inline">
-                                    <button type="submit" class="btn btn btn-info">
-                                        <span class="glyphicon glyphicon-th-list"></span> Add to Playlist
-                                    </button>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endif %}
+
                     <p class="text-center">
                         <audio controls autoplay>
                             <source src="{{ asset('uploads/musics/songs/'~music.musicFiles.songPath) }}"> </source>
@@ -51,7 +54,9 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="well">
-                    {% include 'AMMusicBundle:Comment:newForm.html.twig' %}
+                    {% if app.user %}
+                        {% include 'AMMusicBundle:Comment:newForm.html.twig' %}
+                    {% endif %}
                     <br />
                     {% for comment in music.comments %}
                         <div class="panel panel-info">
