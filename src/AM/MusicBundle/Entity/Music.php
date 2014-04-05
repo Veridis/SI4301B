@@ -65,7 +65,7 @@ class Music
     protected $uploadedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="AM\MusicBundle\Entity\Comment", mappedBy="music")
+     * @ORM\OneToMany(targetEntity="AM\MusicBundle\Entity\Comment", mappedBy="music", cascade={"persist", "remove"})
      */
     protected $comments;
 

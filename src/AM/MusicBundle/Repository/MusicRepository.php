@@ -92,6 +92,26 @@ class MusicRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+
+    public function findFavWithMusics($userId)
+    {
+        $qb = $this->createQueryBuilder('music')
+            ->leftJoin('music.musicFiles', 'musicFiles')
+            ->addSelect('musicFiles')
+            ->leftJoin('music.user', 'user')
+            ->addSelect('user')
+            ->leftJoin('user.favMusics', 'favMusics')
+            ->addSelect('favMusics')
+            ->where('user.id = :userId')
+            //->where('favMusics.user_id = :userId')
+            //->where('IDENTITY(user.favMusics) = :userId')
+            ->setParameter('userId', $userId)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
+
     public function orderMusicBy($order)
     {
         $qb = $this->createQueryBuilder('music');
@@ -101,26 +121,41 @@ class MusicRepository extends EntityRepository
         {
             case 'artist' :
                 $qb->leftJoin('music.user', 'user')
+                    ->addSelect('user')
+                    ->leftJoin('music.musicFiles', 'musicFiles')
+                    ->addSelect('musicFiles')
                     ->orderBy('user.username', 'ASC');
                 //$orderBy = 'user.username';
                 break;
             case 'title' :
                 $qb->leftJoin('music.user', 'user')
+                    ->addSelect('user')
+                    ->leftJoin('music.musicFiles', 'musicFiles')
+                    ->addSelect('musicFiles')
                     ->orderBy('music.title', 'ASC');
                 //$orderBy = 'music.title';
                 break;
             case 'album' :
                 $qb->leftJoin('music.user', 'user')
+                    ->addSelect('user')
+                    ->leftJoin('music.musicFiles', 'musicFiles')
+                    ->addSelect('musicFiles')
                     ->orderBy('music.album', 'ASC');
                 //$orderBy = 'music.album';
                 break;
             case 'style' :
                 $qb->leftJoin('music.user', 'user')
+                    ->addSelect('user')
+                    ->leftJoin('music.musicFiles', 'musicFiles')
+                    ->addSelect('musicFiles')
                     ->orderBy('music.style', 'ASC');
                // $orderBy = 'music.style';
                 break;
             case 'duration' :
                 $qb->leftJoin('music.user', 'user')
+                    ->addSelect('user')
+                    ->leftJoin('music.musicFiles', 'musicFiles')
+                    ->addSelect('musicFiles')
                     ->orderBy('music.duration', 'ASC');
                 //$orderBy = 'music.duration';
                 break;

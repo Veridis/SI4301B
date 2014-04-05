@@ -29,6 +29,7 @@ class SearchController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $musics = $em->getRepository('AMMusicBundle:Music')->searchMusic($request->get('research'));
+
         return array('musics' => $musics);
     }
 

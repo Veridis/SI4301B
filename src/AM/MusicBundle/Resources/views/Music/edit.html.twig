@@ -6,7 +6,7 @@
             <div class="col-md-6 col-md-offset-3">
                 <div class="well">
                     <form class ="form-horizontal" action="{{ path('music_update', {'id' : music.id}) }}" method="post" {{ form_enctype(edit_form) }}>
-                        <h2>Edditing {{ music.title }}</h2>
+                        <h2>Editing {{ music.title }}</h2>
                         <div class="form-group">
                             {% if form_errors(edit_form.title)|length > 0 %}
                                 <div class="alert alert-danger alert-dismissable">

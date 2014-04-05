@@ -11,20 +11,28 @@ namespace AM\UserBundle\Form;
 use AM\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('username', 'text', array(
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $user = $event->getData();
+            $form = $event->getForm();
+
+            $form->add('username', 'text', array(
                 'attr' => array(
                     'class' => 'form-control',
                     'placeholder' => 'Artist name, band name ...',
+                    'disabled' => (null === $user->getId()) ? false : true
                 )
-            ))
-            ->add('email', 'email', array(
+            ));
+        });
+
+        $builder->add('email', 'email', array(
                 'attr' => array(
                     'class' => 'form-control',
                     'placeholder' => 'Email',

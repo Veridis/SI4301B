@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
@@ -15,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AM\UserBundle\Repository\UserRepository")
+ * @UniqueEntity("email")
+ * @UniqueEntity("username")
  */
 class User implements AdvancedUserInterface
 {
@@ -62,7 +65,7 @@ class User implements AdvancedUserInterface
     protected $email;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="array", length=255, unique=true)
      */
     protected $roles;
 

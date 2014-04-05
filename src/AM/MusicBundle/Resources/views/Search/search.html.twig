@@ -8,6 +8,11 @@
                     <h1>Result of research</h1><br />
                 </div>
             </div>
+            {% if musics|length == 0 %}
+            <div class="alert alert-danger text-center col-md-6 col-md-offset-3">
+               <span class="glyphicon glyphicon-search"></span> No musics found :(
+            </div>
+            {% endif %}
             {% for music in musics %}
                 <li class="media">
                     <div class="container">
@@ -28,12 +33,14 @@
                             </div>
                             <div class="col-md-3">
                                 <a class="btn btn-xs btn-info" href="{{ path('music_show', {'id' : music.id}) }}" data-toggle="tooltip" data-placement="right" title="See more"><span class="glyphicon glyphicon-play"></span></a><br/>
-                                <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
-                                    <button type="submit" class="btn btn-xs btn-info">
-                                        <i class="glyphicon glyphicon-heart"></i>
-                                    </button>
-                                </form>
-                                <a class="btn btn-xs btn-info" href="" data-toggle="tooltip" data-placement="right" title="Add to playlist"><span class="glyphicon glyphicon-th-list"></span></a><br/>
+                                {% if app.user is not null %}
+                                    <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
+                                        <button type="submit" class="btn btn-xs btn-info">
+                                            <i class="glyphicon glyphicon-heart"></i>
+                                        </button>
+                                    </form>
+                                    <a class="btn btn-xs btn-info" href="" data-toggle="tooltip" data-placement="right" title="Add to playlist"><span class="glyphicon glyphicon-th-list"></span></a><br/>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

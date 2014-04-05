@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserController extends Controller
@@ -45,34 +46,23 @@ class UserController extends Controller
         );
     }
 
-    public function createEditForm($user)
-    {
-        $form = $this->createForm(new UserType(), $user, array(
-            'action' => $this->generateUrl('user_update', array('id' => $user->getId())),
-            'method' => 'POST',
-        ));
-
-        //$form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
-    }
-
     /**
-     * @Route("/update/{id}", name = "user_update")
+     * @Route("/update/{id}", requirements={"id" = "\d+"}, name="user_update")
      * @Template("AMUserBundle:User:edit.html.twig")
      * @Method("POST")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('AMUserBundle:User')->find($id);
-
+       //$user = $em->getRepository('AMUserBundle:User')->find($id);
+        $user = $this->getUser();
         if (!$user) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
 
         $editForm = $this->createEditForm($user);
         $editForm->handleRequest($request);
+
 
         if ($editForm->isValid()) {
             $this->setEncodedPassword($user);
@@ -86,6 +76,7 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('user_show', array('id' => $user->getId())));
         }
+
 
         return array(
             'user'      => $user,
@@ -101,29 +92,32 @@ class UserController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = new User();
-        $form = $this->createCreateForm($entity);
+        $user = new User();
+        $form = $this->createCreateForm($user);
         $form->handleRequest($request);
 
         if($form->isValid()) {
             $factory = $this->get('security.encoder_factory');
-            $encoder = $factory->getEncoder($entity);
-            $encodedPassword = $encoder->encodePassword($entity->getPlainPassword(), $entity->getSalt());
-            $entity->setPassword($encodedPassword);
-            $entity->eraseCredentials();
+            $encoder = $factory->getEncoder($user);
+            $encodedPassword = $encoder->encodePassword($user->getPlainPassword(), $user->getSalt());
+            $user->setPassword($encodedPassword);
+            $user->eraseCredentials();
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $em->persist($user);
             $em->flush();
+
+            $this->authenticateUser($user);
+
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf('Welcome on AtoMusic %s, have fun with us and share your musics!', $user->getUsername())
+            );
 
             return $this->redirect($this->generateUrl('site_home'));
         }
-        else{
-            var_dump($form->getErrors());
-            die();
-        }
         return array(
-            'entity' => $entity,
+            'entity' => $user,
             'create_form'   => $form->createView(),
         );
     }
@@ -217,7 +211,7 @@ class UserController extends Controller
     public function removeFavAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $music = $em->getRepository("AMMusicBundle:Music")->find($id);
+        $music = $em->getRepository('AMMusicBundle:Music')->find($id);
 
         if(!$music){
             throw $this->createNotFoundException('Unable to find Music entity.');
@@ -242,9 +236,37 @@ class UserController extends Controller
      */
     public function indexFavAction()
     {
+        $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $favMusics = $user->getFavMusics();
+        $favMusics = $em->getRepository('AMMusicBundle:Music')->findFavWithMusics($user->getId());
 
         return array('favMusics' => $favMusics);
+    }
+
+    /**
+     * @param $user
+     */
+    private function authenticateUser($user)
+    {
+        $token = new UsernamePasswordToken(
+            $user,
+            $user->getPassword(),
+            'user_area',
+            $user->getRoles()
+        );
+        $securityContext = $this->container->get('security.context');
+        $securityContext->setToken($token);
+    }
+
+    private function createEditForm($user)
+    {
+        $form = $this->createForm(new UserType(), $user, array(
+            'action' => $this->generateUrl('user_update', array('id' => $user->getId())),
+            'method' => 'POST',
+        ));
+
+        //$form->add('submit', 'submit', array('label' => 'Update'));
+
+        return $form;
     }
 } 

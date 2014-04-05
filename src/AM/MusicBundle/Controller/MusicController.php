@@ -186,12 +186,10 @@ class MusicController extends Controller
         {
             throw $this->createNotFoundException('Unable to find Music entity.');
         }
-        /*
            if ($this->getUser()->getId() != $comment->getUser()->getId())
            {
                throw new AccessDeniedException();
            }
-        */
 
         $commentDeleteForm = $this->createDeleteCommentForm($comment);
         $commentDeleteForm->handleRequest($request);
