@@ -6,3 +6,21 @@ img.big-cover-size{
     width: 200px;
     height: 200px;
 }
+img.rotate{
+
+    -webkit-transition: -webkit-transform 7s linear;
+    -moz-transition: -moz-transform 7s linear;
+    -ms-transition: -ms-transform 7s linear;
+    -o-transition: -o-transform 7s linear;
+    transition: transform 10s linear;
+
+
+}
+
+img.rotate:hover{
+    -moz-transform: scale(1) rotate(1800deg);
+    -webkit-transform: scale(1) rotate(1800deg);
+    -o-transform: scale(1) rotate(1800deg);
+    -ms-transform: scale(1) rotate(1800deg);
+    transform: scale(1) rotate(1800deg);
+}

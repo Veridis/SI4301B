@@ -46,7 +46,7 @@ class Music
     protected $style;
 
     /**
-     * @ORM\OneToOne(targetEntity="AM\MusicBundle\Entity\MusicFiles", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="AM\MusicBundle\Entity\MusicFiles", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="musicfile_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $musicFiles;

@@ -81,6 +81,11 @@ class MusicController extends Controller
             $em->persist($music);
             $em->flush();
 
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                'The music has been added !'
+            );
+
             return $this->redirect($this->generateUrl('music_show', array('id' => $music->getId())));
         }
         return array(
@@ -226,6 +231,11 @@ class MusicController extends Controller
             $music->getMusicFiles()->upload();
             $em->flush();
 
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                'The informations have been changed.'
+            );
+
             return $this->redirect($this->generateUrl('mymusics'));
         }
 
@@ -252,6 +262,11 @@ class MusicController extends Controller
 
         $em->remove($music);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add(
+            'warning',
+            'The music has been removed.'
+        );
 
         return $this->redirect($this->generateUrl('mymusics'));
     }

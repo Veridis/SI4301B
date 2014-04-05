@@ -48,18 +48,18 @@ class UserController extends Controller
     {
         $form = $this->createForm(new UserType(), $user, array(
             'action' => $this->generateUrl('user_update', array('id' => $user->getId())),
-            'method' => 'PUT',
+            'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        //$form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
 
     /**
      * @Route("/update/{id}", name = "user_update")
-     * @Template("AMAdminBundle:User:edit.html.twig")
-     * @Method("PUT")
+     * @Template("AMUserBundle:User:edit.html.twig")
+     * @Method("POST")
      */
     public function updateAction(Request $request, $id)
     {
@@ -79,15 +79,15 @@ class UserController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()->add(
-                'notice',
-                'Your informations have been changed'
+                'success',
+                'Your informations have been changed.'
             );
 
             return $this->redirect($this->generateUrl('user_show', array('id' => $user->getId())));
         }
 
         return array(
-            'entity'      => $user,
+            'user'      => $user,
             'edit_form'   => $editForm->createView(),
         );
     }
@@ -200,8 +200,11 @@ class UserController extends Controller
         $em->persist($user);
         $em->flush();
 
-        // faire un return this redirect d'une route generée
-        //return array('music' => $music);
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            'Music added to Favs'
+        );
+
         return $this->redirect($this->generateUrl('music_show', array('id' => $music->getId())));
     }
 
@@ -222,6 +225,11 @@ class UserController extends Controller
         $user->removeFavMusic($music);
         $em->persist($user);
         $em->flush();
+
+        $this->get('session')->getFlashBag()->add(
+            'warning',
+            'Music removed from Favs.'
+        );
 
         // faire un return this redirect d'une route generée
         return $this->redirect($this->generateUrl('user_favs'));

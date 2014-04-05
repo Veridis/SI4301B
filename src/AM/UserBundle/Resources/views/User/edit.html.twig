@@ -1,9 +1,68 @@
 {% extends 'AMUserBundle::layout.html.twig' %}
 {% block body %}
-    <h2>Edit {{ user.username }}'s profile</h2>
-    <div class="well">
-        <div class="container">
-            {{ form(edit_form) }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well">
+                    <form class ="form-horizontal" action="{{ path('user_update', {'id' : user.id}) }}" method="post">
+                        <h2>Editing {{ user.username }}'s Profile </h2>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.username)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.username) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.username) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.username) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.plainPassword.first)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.plainPassword.first) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.plainPassword.first) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.plainPassword.first) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.plainPassword.second)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.plainPassword.second) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.plainPassword.second) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.plainPassword.second) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {% if form_errors(edit_form.email)|length > 0 %}
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    {{ form_errors(edit_form.email) }}
+                                </div>
+                            {% endif %}
+                            <span class="col-sm-2 control-label">{{ form_label(edit_form.email) }}</span>
+                            <div class="col-md-10">
+                                {{ form_widget(edit_form.email) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input class="btn btn-lg btn-warning btn-block" type="submit" value="Edit profile" />
+                            </div>
+                        </div>
+                        {{ form_rest(edit_form) }}
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
