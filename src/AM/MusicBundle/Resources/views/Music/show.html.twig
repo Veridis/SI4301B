@@ -4,17 +4,18 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="thumbnail">
-                    <img class="media-object big-cover-size img-circle rotate tooltip-info" data-toggle="tooltip" data-placement="bottom" title="Let's Scratch!"
-                         src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" />
+                    <img class="media-object big-cover-size img-circle rotate tooltip-info"
+                         data-toggle="tooltip" data-placement="left" title="Let's Scratch!"
+                         src="{{ asset('uploads/musics/covers/'~music.musicFiles.coverPath) }}" />
                     <div class="caption text-center">
-                        <h3 class="media-heading">{{ music.title|title }} - <em>{{ music.user.username }}</em> <small>({{ music.convertDuration() }})</small></h3>
+                        <h3 class="media-heading">{{ music.title|title }} - <em><a href="{{ path('user_show', {'id' : music.user.id}) }}">{{ music.user.username }}</a></em> <small>({{ music.convertDuration() }})</small></h3>
                         <p>
                             From <strong><small>{{ music.album|upper }}</small></strong> album. <br />
                             <span class="label label-info">{{ music.style }}</span>
                         </p><br />
                         <div class="row">
                             <div class="col-md-2 col-md-offset-2">
-                                {% if app.user.haveFav(music) == 1 %}
+                                {% if app.user.haveFav(music) %}
                                     <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
                                         <button type="submit" class="btn btn btn-danger">
                                             <span class="glyphicon glyphicon-remove"></Span>  Remove from favs
@@ -39,10 +40,46 @@
                     </div>
                     <p class="text-center">
                         <audio controls autoplay>
-                            <source src="{{ asset('uploads/musics/songs/') }}{{ music.musicFiles.songPath }}"> </source>
+                            <source src="{{ asset('uploads/musics/songs/'~music.musicFiles.songPath) }}"> </source>
                         </audio>
                     </p>
 
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="well">
+                    {% include 'AMMusicBundle:Comment:newForm.html.twig' %}
+                    <br />
+                    {% for comment in music.comments %}
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        Posted by <a href="{{ path('user_show', {'id' : comment.user.id}) }}">{{ comment.user.username }}</a>
+                                    </div>
+                                    <div class="col-md-3 text-right">
+                                        <small>{{ comment.postedAt|date("F jS \\a\\t g:ia")}}</small>
+                                    </div>
+                                    <div class="col-md-1">
+                                        {% if app.user.id == comment.user.id %}
+                                            <form class="form-inline" action="{{ path('comment_delete', {'id' : comment.id}) }}" method="post">
+                                                <button type="submit" class="btn btn-xs btn-danger tooltip-info"
+                                                        data-toggle="tooltip" data-placement="right" title="Delete comment">
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                {{ comment.content|nl2br }}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

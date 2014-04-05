@@ -19,7 +19,17 @@
                 </div>
             {% endif %}
         </div>
+        <div class="row">
+            {% for music in last_musics %}
+                <div class="col-xs-6 col-sm-4 col-md-3">
+                    <a href="{{ path('music_show', {'id' : music.id}) }}">
+                        <img class="img-circle big-cover-size rotate" src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" />
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
     {% block searchResult %}
     {% endblock %}
 {% endblock %}

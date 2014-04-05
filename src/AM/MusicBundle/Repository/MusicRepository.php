@@ -19,6 +19,8 @@ class MusicRepository extends EntityRepository
         $queryBuilder = $this->createQueryBuilder('music')
             ->leftJoin('music.user', 'user')
             ->addSelect('user')
+            ->leftJoin('music.musicFiles', 'musicFiles')
+            ->addSelect('musicFiles')
             ->orderBy('music.uploadedAt','DESC')
         ;
 
@@ -29,6 +31,9 @@ class MusicRepository extends EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('music')
             ->leftJoin('music.user', 'user')
+            ->addSelect('user')
+            ->leftJoin('music.musicFiles','musicFiles')
+            ->addSelect('musicFiles')
             ->where('user.id = :userId')
             ->setParameter('userId', $userId)
             ->orderBy('music.uploadedAt','DESC')
@@ -37,17 +42,33 @@ class MusicRepository extends EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-    public function findAllMusicData($musicId)
+    public function findWithCommentsAndUser($musicId)
     {
         $qb = $this->createQueryBuilder('music')
-            ->leftJoin('music.user', 'user')
-            ->addSelect('user')
             ->leftJoin('music.musicFiles', 'musicFiles')
             ->addSelect('musicFiles')
+            ->leftJoin('music.comments', 'comment')
+            ->addSelect('comment')
+            ->leftJoin('music.user', 'musicUser')
+            ->addSelect('musicUser')
+            ->leftJoin('comment.user', 'commentUser')
+            ->addSelect('commentUser')
             ->where('music.id = :musicId')
             ->setParameter('musicId', $musicId)
+            ->orderBy('comment.postedAt', 'DESC')
         ;
 
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function findLastMusics($max = 4)
+    {
+        $qb = $this->createQueryBuilder('music')
+            ->leftJoin('music.musicFiles', 'musicFiles')
+            ->addSelect('musicFiles')
+            ->orderBy('music.uploadedAt', 'DESC')
+            ->setMaxResults($max)
+        ;
         return $qb->getQuery()->getResult();
     }
 

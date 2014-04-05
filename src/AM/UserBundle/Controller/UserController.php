@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UserController extends Controller
 {
@@ -161,7 +162,7 @@ class UserController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository("AMUserBundle:User")->find($id);
+        $user = $em->getRepository("AMUserBundle:User")->findWithAllMusics($id);
 
         if (!$user) {
             throw $this->createNotFoundException('Unable to find User entity.');

@@ -3,6 +3,7 @@
 namespace AM\MusicBundle\Entity;
 
 use AM\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -63,12 +64,19 @@ class Music
      */
     protected $uploadedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AM\MusicBundle\Entity\Comment", mappedBy="music")
+     */
+    protected $comments;
+
 
     public function __construct()
     {
+        $this->comments = new ArrayCollection();
         $this->uploadedAt = new \DateTime('now');
         $this->musicFiles = new MusicFiles();
     }
+
     public function setAlbum($album)
     {
         $this->album = $album;
@@ -167,5 +175,24 @@ class Music
     public function convertDuration()
     {
         return gmdate('i:s', $this->getDuration());
+    }
+
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+
+        return $this;
     }
 }

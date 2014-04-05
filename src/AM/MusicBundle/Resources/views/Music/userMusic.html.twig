@@ -1,6 +1,6 @@
 {% extends 'AMMusicBundle::layout.html.twig' %}
 
-{% block body -%}
+{% block body %}
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -17,7 +17,7 @@
                                     <img class="media-object cover-size img-circle" src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" />
                                 </a>
                                 <div class="media-body">
-                                    <h3 class="media-heading">{{ music.title|title }} - <em>{{ music.user.username }}</em> <small>({{ music.convertDuration() }})</small></h3>
+                                    <h3 class="media-heading">{{ music.title|title }} - <em><a href="{{ path('user_show', {'id' : music.user.id}) }}">{{ music.user.username }}</a></em> <small>({{ music.convertDuration() }})</small></h3>
                                     {% if music.album is not null %}
                                         <p>
                                             From <strong><small>{{ music.album|upper }}</small></strong> album. <br />

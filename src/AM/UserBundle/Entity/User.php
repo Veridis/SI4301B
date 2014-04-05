@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Administrator
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AM\UserBundle\Repository\UserRepository")
  */
 class User implements AdvancedUserInterface
 {
@@ -247,9 +247,7 @@ class User implements AdvancedUserInterface
 
     public function haveFav(Music $music)
     {
-        if($this->favMusics->contains($music))
-            return true;
-        return false;
+        return $this->favMusics->contains($music);
     }
 
     public function isEnabled()

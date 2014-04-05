@@ -21,6 +21,9 @@ class SiteController extends Controller
      */
     public function siteAction()
     {
-        return array();
+        $em = $this->getDoctrine()->getRepository('AMMusicBundle:Music');
+        $lastMusics = $em->findLastMusics(4);
+
+        return array('last_musics' => $lastMusics);
     }
 } 
