@@ -8,6 +8,7 @@
 
 namespace AM\MusicBundle\Form;
 
+use AM\MusicBundle\Entity\MusicFiles;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

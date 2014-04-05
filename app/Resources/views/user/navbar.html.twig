@@ -16,6 +16,7 @@
                 </form>
                 {% if app.user %}
                     <li {% if app.request.attributes.get('_route') == 'mymusics' %}class="active"{% endif %}><a href="{{ path('mymusics') }}">My musics</a></li>
+                    <li {% if app.request.attributes.get('_route') == 'user_favs' %}class="active"{% endif %}><a href="{{ path('user_favs') }}">Fav' Musics</a></li>
                     <li {% if app.request.attributes.get('_route') == 'user_show' %}class="active"{% endif %}><a href="{{ path('user_show', { 'id' : app.user.id }) }}">{{ app.user.username }}</a></li>
                     <li><a href="{{ path('user_logout') }}">Logout</a></li>
                 {% else %}

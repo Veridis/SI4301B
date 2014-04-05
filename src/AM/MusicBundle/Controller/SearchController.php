@@ -33,6 +33,7 @@ class SearchController extends Controller
     }
 
     /**
+     * Rajouter des requierement sur order
      * @Route("/musics/orderby/{order}", name="music_orderby")
      * @Template("AMMusicBundle:Music:index.html.twig")
      */

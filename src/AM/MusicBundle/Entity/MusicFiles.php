@@ -8,6 +8,8 @@
 
 namespace AM\MusicBundle\Entity;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -18,6 +20,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class MusicFiles
 {
+
+    const DEFAULT_COVER = 'default_cover.png';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -26,7 +31,7 @@ class MusicFiles
     protected $id;
 
     /**
-     * @Assert\File(maxSize="250k")
+     * @Assert\File(maxSize="500k")
      * @Assert\Image(mimeTypes={"image/gif", "image/jpeg", "image/png"})
      */
     protected $cover;
@@ -49,7 +54,7 @@ class MusicFiles
 
     public function __construct()
     {
-        $this->coverPath = 'default_cover.png';
+        $this->coverPath = self::DEFAULT_COVER;
     }
 
     public function setCover($cover)
@@ -178,6 +183,9 @@ class MusicFiles
             $this->cover->move($this->getCoverUploadDir(), $coverName);
             $this->coverPath = $coverName;
         }
+        else {
+            $this->coverPath = self::DEFAULT_COVER;
+        }
 
         $this->song = null;
         $this->cover = null;
@@ -185,7 +193,15 @@ class MusicFiles
 
     public function removeFiles()
     {
-
+        $fs = new Filesystem();
+        try {
+            $fs->remove($this->getSongWebPath());
+            if($this->coverPath != self::DEFAULT_COVER)
+                $fs->remove($this->getCoverWebPath());
+        } catch (IOException $e) {
+            var_dump($this->getSongWebPath());
+            die();
+        }
     }
 
 } 

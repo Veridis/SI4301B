@@ -21,7 +21,7 @@ class Music
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\AM\UserBundle\Entity\User", inversedBy="musics")
+     * @ORM\ManyToOne(targetEntity="AM\UserBundle\Entity\User", inversedBy="musics")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -46,8 +46,8 @@ class Music
     protected $style;
 
     /**
-     * @ORM\OneToOne(targetEntity="\AM\MusicBundle\Entity\MusicFiles", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="musicfile_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="AM\MusicBundle\Entity\MusicFiles", cascade={"persist"})
+     * @ORM\JoinColumn(name="musicfile_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $musicFiles;
 

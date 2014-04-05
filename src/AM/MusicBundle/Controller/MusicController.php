@@ -77,7 +77,7 @@ class MusicController extends Controller
                 throw new \Exception('The User is not valid.');
             }
             $music->setUser($user);
-            $music->getMusicFiles()->upload();
+            $music->getMusicFiles()->upload(); // essayer de le faire avec les event prepersist
             $em->persist($music);
             $em->flush();
 
@@ -137,8 +137,8 @@ class MusicController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        //$datas = $em->getRepository('AMMusicBundle:Music')->findAllMusicData($id);
         $music = $em->getRepository('AMMusicBundle:Music')->find($id);
-
         if (!$music) {
             throw $this->createNotFoundException('Unable to find Music entity.');
         }
@@ -226,7 +226,7 @@ class MusicController extends Controller
             $music->getMusicFiles()->upload();
             $em->flush();
 
-            return $this->redirect($this->generateUrl('music_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('mymusics'));
         }
 
         return array(

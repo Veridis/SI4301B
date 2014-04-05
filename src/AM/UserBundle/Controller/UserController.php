@@ -181,4 +181,61 @@ class UserController extends Controller
         $user->setPassword($encodedPassword);
         $user->eraseCredentials();
     }
+
+    /**
+     * @Route("/addfav/{id}", requirements={"id" = "\d+"}, name="user_addfav")
+     * @Template("AMMusicBundle:Music:show.html.twig")
+     * @Method("POST")
+     */
+    public function addFavAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $music = $em->getRepository("AMMusicBundle:Music")->find($id);
+
+        if(!$music){
+            throw $this->createNotFoundException('Unable to find Music entity.');
+        }
+        $user = $this->getUser();
+        $user->addFavMusic($music);
+        $em->persist($user);
+        $em->flush();
+
+        // faire un return this redirect d'une route generée
+        //return array('music' => $music);
+        return $this->redirect($this->generateUrl('music_show', array('id' => $music->getId())));
+    }
+
+    /**
+     * @Route("/removefav/{id}", requirements={"id" = "\d+"}, name="user_removefav")
+     * @Template("AMMusicBundle:Music:show.html.twig")
+     * @Method("POST")
+     */
+    public function removeFavAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $music = $em->getRepository("AMMusicBundle:Music")->find($id);
+
+        if(!$music){
+            throw $this->createNotFoundException('Unable to find Music entity.');
+        }
+        $user = $this->getUser();
+        $user->removeFavMusic($music);
+        $em->persist($user);
+        $em->flush();
+
+        // faire un return this redirect d'une route generée
+        return $this->redirect($this->generateUrl('user_favs'));
+    }
+
+    /**
+     * @Route("/favs", name="user_favs")
+     * @Template()
+     */
+    public function indexFavAction()
+    {
+        $user = $this->getUser();
+        $favMusics = $user->getFavMusics();
+
+        return array('favMusics' => $favMusics);
+    }
 } 

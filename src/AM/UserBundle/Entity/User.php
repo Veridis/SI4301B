@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 /**
  * Administrator
  *
@@ -83,20 +84,27 @@ class User implements AdvancedUserInterface
     protected $credentialsNonExpired;
 
     /**
-     * @ORM\OneToMany(targetEntity="\AM\MusicBundle\Entity\Music", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="AM\MusicBundle\Entity\Music", mappedBy="user")
      */
     protected $musics;
 
-    /*
-    protected $favoriteMusics;
+    /**
+     * @ORM\ManyToMany(targetEntity="AM\MusicBundle\Entity\Music", cascade={"persist"})
+     * @ORM\JoinTable(name="UserFavMusic",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="music_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      )
+     */
+    protected $favMusics;
 
-    protected $playlists;
-    */
+    //protected $playlists;
+
 
 
     public function __construct()
     {
         $this->musics = new ArrayCollection();
+        $this->favMusics = new ArrayCollection();
 
         $this->salt = uniqid();
         $this->roles = array(self::ROLE_USER);
@@ -206,6 +214,42 @@ class User implements AdvancedUserInterface
         }
 
         return $this;
+    }
+
+  /*  public function setFavMusics($favMusics)
+    {
+        $this->favMusics = array();
+        foreach($favMusics as $favMusic) {
+            $this->addRole($favMusic);
+        }
+
+        return $this;
+    }
+*/
+    public function getFavMusics()
+    {
+        return $this->favMusics;
+    }
+
+    public function addFavMusic(Music $music)
+    {
+        $this->favMusics[] = $music;
+
+        return $this;
+    }
+
+    public function removeFavMusic(Music $music)
+    {
+        $this->favMusics->removeElement($music);
+
+        return $this;
+    }
+
+    public function haveFav(Music $music)
+    {
+        if($this->favMusics->contains($music))
+            return true;
+        return false;
     }
 
     public function isEnabled()

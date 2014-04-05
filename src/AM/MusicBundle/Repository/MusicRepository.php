@@ -37,11 +37,26 @@ class MusicRepository extends EntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+    public function findAllMusicData($musicId)
+    {
+        $qb = $this->createQueryBuilder('music')
+            ->leftJoin('music.user', 'user')
+            ->addSelect('user')
+            ->leftJoin('music.musicFiles', 'musicFiles')
+            ->addSelect('musicFiles')
+            ->where('music.id = :musicId')
+            ->setParameter('musicId', $musicId)
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function searchMusic($research)
     {
         $qb = $this->createQueryBuilder('music');
 
         $qb->leftJoin('music.user', 'user')
+            ->addSelect('user')
             ->where(
                 $qb->expr()->orX(
                     $qb->expr()->like('user.username', ':research'),
@@ -50,7 +65,9 @@ class MusicRepository extends EntityRepository
                     $qb->expr()->like('music.album', ':research')
                 )
             )
-        ->setParameter('research', '%'.$research.'%');
+            ->setParameter('research', '%'.$research.'%')
+        ;
+
         return $qb->getQuery()->getResult();
     }
 
@@ -93,5 +110,4 @@ class MusicRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
-
 } 

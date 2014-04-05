@@ -1,7 +1,6 @@
 {% extends 'AMMusicBundle::layout.html.twig' %}
 {% block body %}
     <div class="container">
-
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="thumbnail">
@@ -12,10 +11,30 @@
                             From <strong><small>{{ music.album|upper }}</small></strong> album. <br />
                             <span class="label label-info">{{ music.style }}</span>
                         </p><br />
-                        <p class="text-center">
-                            <a class="btn btn-info" href="" title="Add to Favs"><span class="glyphicon glyphicon-heart"></span> Add to Favs</a>
-                            <a class="btn btn-info" href="" title="Add to playlist"><span class="glyphicon glyphicon-th-list"></span> Add to Playlist</a>
-                        </p>
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-2">
+                                {% if app.user.haveFav(music) == 1 %}
+                                    <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
+                                        <button type="submit" class="btn btn btn-danger">
+                                            <span class="glyphicon glyphicon-remove"></Span>  Remove from favs
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
+                                        <button type="submit" class="btn btn btn-info">
+                                            <span class="glyphicon glyphicon-heart"></Span> Add to favs
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-2 col-md-offset-2">
+                                <form class="form-inline">
+                                    <button type="submit" class="btn btn btn-info">
+                                        <span class="glyphicon glyphicon-th-list"></span> Add to Playlist
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <p class="text-center">
                         <audio controls autoplay>

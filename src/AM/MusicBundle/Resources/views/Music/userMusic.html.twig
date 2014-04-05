@@ -27,8 +27,26 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <a class="btn btn-xs btn-info" href="{{ path('music_show', {'id' : music.id}) }}" data-toggle="tooltip" data-placement="right" title="Play Music"><span class="glyphicon glyphicon-play"></span></a><br/>
-                                <a class="btn btn-xs btn-warning" href="{{ path('music_edit', { 'id': music.id }) }}" data-toggle="tooltip" data-placement="right" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a><br/>
+                                <a class="btn btn-xs btn-info tooltip-info" href="{{ path('music_show', {'id' : music.id}) }}"
+                                   data-toggle="tooltip" data-placement="right" title="Play it !">
+                                        <span class="glyphicon glyphicon-play"></span>
+                                </a><br/>
+                                {% if app.user.haveFav(music) == 1 %}
+                                    <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
+                                        <button type="submit" class="btn btn-xs btn-danger tooltip-info"
+                                                data-toggle="tooltip" data-placement="right" title="remove from Favs">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
+                                        <button type="submit" class="btn btn-xs btn-info tooltip-info"
+                                                data-toggle="tooltip" data-placement="right" title="Add to Favs">
+                                            <i class="glyphicon glyphicon-heart"></i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                <a class="btn btn-xs btn-warning tooltip-info" href="{{ path('music_edit', { 'id': music.id }) }}" data-toggle="tooltip" data-placement="right" title="Edit Music"><span class="glyphicon glyphicon-pencil"></span></a><br/>
                             </div>
                         </div>
                     </div>
@@ -36,4 +54,11 @@
             {% endfor %}
         </ul>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $('.tooltip-info').tooltip();
+        });
+    </script>
 {% endblock %}
