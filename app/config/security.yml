@@ -30,6 +30,7 @@ security:
             logout:
                 path: admin_logout
                 target: admin_login
+                #invalidate_session: false
 
         user_area:
             pattern: ^/
