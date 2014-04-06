@@ -15,10 +15,30 @@ class MusicType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('album')
-            ->add('style')
-            ->add('duration')
+            ->add('title', 'text', array(
+                'attr' => array(
+                    'class' => 'form-control',
+                    'placeholder' => 'Music title',
+                )
+            ))
+            ->add('album', 'text', array(
+                'attr' => array(
+                    'class' => 'form-control',
+                    'placeholder' => 'Album',
+                )
+            ))
+            ->add('style', 'text', array(
+                'attr' => array(
+                    'class' => 'form-control',
+                    'placeholder' => 'Rock, Electro, House, R&B ...',
+                )
+            ))
+            ->add('duration', 'integer', array(
+                'attr' => array(
+                    'class' => 'form-control',
+                    'placeholder' => 'In seconds',
+                )
+            ))
             ->add('musicfiles', new MusicFilesType())
         ;
     }

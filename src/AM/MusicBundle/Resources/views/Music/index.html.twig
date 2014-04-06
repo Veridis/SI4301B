@@ -1,51 +1,81 @@
-{% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1>Music list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Artist</th>
-                <th>Title</th>
-                <th>Album</th>
-                <th>Coverpath</th>
-                <th>Style</th>
-                <th>Path</th>
-                <th>Duration</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for music in musics %}
-            <tr>
-                <td><a href="{{ path('music_show', { 'id': music.id }) }}">{{ music.id }}</a></td>
-                <td>{{ music.user.username }}</td>
-                <td>{{ music.title }}</td>
-                <td>{{ music.album }}</td>
-                <td>{{ music.style }}</td>
-                <td>{{ music.duration }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('music_show', { 'id': music.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('music_edit', { 'id': music.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('music_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+{% extends 'AMMusicBundle::layout.html.twig' %}
+{% block body %}
+    <div class="container">
+        <ul class="media-list">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <h1>Musics</h1><br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-7 col-md-offset-3">
+                    <ul class="nav nav-tabs">
+                        <li class="disabled"><a>Order by</a></li>
+                        <li {% if 'artist' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'artist'}) }}">Artist</a></li>
+                        <li {% if 'title' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'title'}) }}">Title</a></li>
+                        <li {% if 'album' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'album'}) }}">Album</a></li>
+                        <li {% if 'style' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'style'}) }}">Style</a></li>
+                        <li {% if 'duration' in app.request.requestUri %}class="active"{% endif %}><a href="{{ path('music_orderby', {'order' : 'duration'}) }}">Duration</a></li>
+                    </ul>
+                </div>
+            </div>
+            {% for music in musics %}
+                <li class="media">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <a class="pull-left" href="{{ path('music_show', {'id' : music.id}) }}">
+                                    <img class="media-object cover-size img-circle" src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" />
+                                </a>
+                                <div class="media-body">
+                                    <h3 class="media-heading">{{ music.title|title }} - <em><a href="{{ path('user_show', {'id' : music.user.id}) }}">{{ music.user.username }}</a></em> <small>({{ music.convertDuration() }})</small></h3>
+                                    {% if music.album is not null %}
+                                        <p>
+                                            From <strong><small>{{ music.album|upper }}</small></strong> album. <br />
+                                            <span class="label label-info">{{ music.style }}</span>
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <a class="btn btn-xs btn-info tooltip-info" href="{{ path('music_show', {'id' : music.id}) }}"
+                                   data-toggle="tooltip" data-placement="right" title="Play it!">
+                                    <span class="glyphicon glyphicon-play"></span>
+                                </a><br/>
+                                {% if app.user %}
+                                    {% if app.user.haveFav(music) %}
+                                    <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
+                                        <button type="submit" class="btn btn-xs btn-danger tooltip-info"
+                                                data-toggle="tooltip" data-placement="right" title="remove from Favs">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                        <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
+                                            <button type="submit" class="btn btn-xs btn-info tooltip-info"
+                                                    data-toggle="tooltip" data-placement="right" title="Add to Favs">
+                                                <i class="glyphicon glyphicon-heart"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                    <a class="btn btn-xs btn-info tooltip-info" href=""
+                                       data-toggle="tooltip" data-placement="right" title="Add to playlist">
+                                        <span class="glyphicon glyphicon-th-list"></span>
+                                    </a>
+                                {% endif %}
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $('.tooltip-info').tooltip();
+    });
+</script>
+{% endblock %}

@@ -1,22 +1,35 @@
 {% extends 'AMSiteBundle::layout.html.twig' %}
 
-{% block title %}
-    {{ parent() }} HomePage
-{% endblock %}
-
 {% block body %}
-    {% include ':user:navbar.html.twig' %}
     <div class="container">
         <div class="header">
             <h3 class="text-muted">AtoMusic</h3>
         </div>
-
         <div class="jumbotron">
             <h1>AtoMusic</h1>
             <p class="lead">Introduce your music to the world.</p>
             {% if not app.user is not null %}
-                <p><a class="btn btn-lg btn-success" href="{{ path('user_new') }}">Register</a><a class="btn btn-lg btn-success" href="{{ path('user_login') }}">Sign in</a></p>
+                <div class="row">
+                    <div class="col-md-1">
+                        <a class="btn btn-lg btn-info" href="{{ path('user_new') }}">Register</a>
+                    </div>
+                    <div class="col-md-1 col-md-offset-1">
+                        <a class="btn btn-lg btn-info" href="{{ path('user_login') }}">Sign in</a>
+                    </div>
+                </div>
             {% endif %}
         </div>
+        <div class="row">
+            {% for music in last_musics %}
+                <div class="col-xs-6 col-sm-4 col-md-3">
+                    <a href="{{ path('music_show', {'id' : music.id}) }}">
+                        <img class="img-circle big-cover-size rotate" src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" />
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
+    {% block searchResult %}
+    {% endblock %}
 {% endblock %}

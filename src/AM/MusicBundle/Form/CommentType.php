@@ -2,49 +2,40 @@
 /**
  * Created by PhpStorm.
  * User: alex
- * Date: 01/04/14
- * Time: 18:09
+ * Date: 05/04/14
+ * Time: 14:38
  */
 
 namespace AM\MusicBundle\Form;
 
-use AM\MusicBundle\Entity\MusicFiles;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class MusicFilesType extends AbstractType
+class CommentType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('song', 'file', array(
-            ))
-            ->add('cover', 'file', array(
-                'required' => 'false',
+            ->add('content', 'textarea', array(
+                'attr' => array(
+                    'class' => 'form-control comment',
+                    'placeholder' => 'Post your comment !',
+                )
             ))
         ;
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AM\MusicBundle\Entity\MusicFiles'
+            'data_class' => 'AM\MusicBundle\Entity\Comment',
+            'cascade_validation' => true,
         ));
     }
 
-    /**
-     * @return string
-     */
     public function getName()
     {
-        return 'am_musicbundle_musicfiles';
+        return 'am_musicbundle_comment';
     }
 } 

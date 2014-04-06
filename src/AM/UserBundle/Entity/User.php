@@ -8,12 +8,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * Administrator
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AM\UserBundle\Repository\UserRepository")
+ * @UniqueEntity("email")
+ * @UniqueEntity("username")
  */
 class User implements AdvancedUserInterface
 {
@@ -56,11 +60,12 @@ class User implements AdvancedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Email()
+     * @Assert\NotBlank()
      */
     protected $email;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="array", length=255, unique=true)
      */
     protected $roles;
 
@@ -82,20 +87,27 @@ class User implements AdvancedUserInterface
     protected $credentialsNonExpired;
 
     /**
-     * @ORM\OneToMany(targetEntity="\AM\MusicBundle\Entity\Music", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="AM\MusicBundle\Entity\Music", mappedBy="user")
      */
     protected $musics;
 
-    /*
-    protected $favoriteMusics;
+    /**
+     * @ORM\ManyToMany(targetEntity="AM\MusicBundle\Entity\Music", cascade={"persist"})
+     * @ORM\JoinTable(name="UserFavMusic",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="music_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      )
+     */
+    protected $favMusics;
 
-    protected $playlists;
-    */
+    //protected $playlists;
+
 
 
     public function __construct()
     {
         $this->musics = new ArrayCollection();
+        $this->favMusics = new ArrayCollection();
 
         $this->salt = uniqid();
         $this->roles = array(self::ROLE_USER);
@@ -205,6 +217,40 @@ class User implements AdvancedUserInterface
         }
 
         return $this;
+    }
+
+  /*  public function setFavMusics($favMusics)
+    {
+        $this->favMusics = array();
+        foreach($favMusics as $favMusic) {
+            $this->addRole($favMusic);
+        }
+
+        return $this;
+    }
+*/
+    public function getFavMusics()
+    {
+        return $this->favMusics;
+    }
+
+    public function addFavMusic(Music $music)
+    {
+        $this->favMusics[] = $music;
+
+        return $this;
+    }
+
+    public function removeFavMusic(Music $music)
+    {
+        $this->favMusics->removeElement($music);
+
+        return $this;
+    }
+
+    public function haveFav(Music $music)
+    {
+        return $this->favMusics->contains($music);
     }
 
     public function isEnabled()

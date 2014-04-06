@@ -3,6 +3,7 @@
 namespace AM\MusicBundle\Entity;
 
 use AM\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,7 +22,7 @@ class Music
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\AM\UserBundle\Entity\User", inversedBy="musics")
+     * @ORM\ManyToOne(targetEntity="AM\UserBundle\Entity\User", inversedBy="musics")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
@@ -34,25 +35,27 @@ class Music
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     protected $album;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max="20")
+     * @Assert\NotBlank()
      */
     protected $style;
 
     /**
-     * @ORM\OneToOne(targetEntity="\AM\MusicBundle\Entity\MusicFiles", cascade={"persist"})
-     * @ORM\JoinColumn(name="musicfile_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="AM\MusicBundle\Entity\MusicFiles", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="musicfile_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $musicFiles;
 
     /**
      * time in seconds
      * @ORM\Column(type="integer")
-     * @Assert\Type(type="integer")
+     * @Assert\Type(type="integer", message="The value {{ value }} is not an {{ type }}.")
      */
     protected $duration;
 
@@ -61,12 +64,19 @@ class Music
      */
     protected $uploadedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AM\MusicBundle\Entity\Comment", mappedBy="music", cascade={"persist", "remove"})
+     */
+    protected $comments;
+
 
     public function __construct()
     {
+        $this->comments = new ArrayCollection();
         $this->uploadedAt = new \DateTime('now');
         $this->musicFiles = new MusicFiles();
     }
+
     public function setAlbum($album)
     {
         $this->album = $album;
@@ -162,8 +172,27 @@ class Music
         return $this->uploadedAt;
     }
 
+    public function convertDuration()
+    {
+        return gmdate('i:s', $this->getDuration());
+    }
 
+    public function getComments()
+    {
+        return $this->comments;
+    }
 
+    public function addComment(Comment $comment)
+    {
+        $this->comments[] = $comment;
 
+        return $this;
+    }
 
+    public function removeComment(Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+
+        return $this;
+    }
 }

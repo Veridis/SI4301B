@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}AM app!{% endblock %}</title>
+        <title>{% block title %}AtoMusic{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% stylesheets 'css/bootstrap.min.css'
                         'css/style.css'
@@ -13,7 +13,39 @@
     </head>
     <body>
         {% include ':user:navbar.html.twig' %}
-        {% block body %}{% endblock %}
+        <div class="container">
+            {% block flashMessage%}
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-6">
+                        {% for flashMessage in app.session.flashbag.get('success') %}
+                            <div class="alert alert-success alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <p class="text-center">
+                                    <span class="glyphicon glyphicon-ok"></span>  {{ flashMessage }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                        {% for flashMessage in app.session.flashbag.get('warning') %}
+                            <div class="alert alert-warning alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <p class="text-center">
+                                    <span class="glyphicon glyphicon-pencil"></span>  {{ flashMessage }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                        {% for flashMessage in app.session.flashbag.get('danger') %}
+                            <div class="alert alert-danger alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <p class="text-center">
+                                    <span class="glyphicon glyphicon-remove"></span>  {{ flashMessage }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endblock %}
+            {% block body %}{% endblock %}
+        </div>
         {% javascripts 'js/jquery.min.js'
                         'js/bootstrap.min.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>

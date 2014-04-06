@@ -1,14 +1,14 @@
 {% extends 'AMMusicBundle::layout.html.twig' %}
 
-{% block body %}
+{% block body -%}
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
-                <h1>My musics <a class="btn btn-info btn-sm" href="{{ path('music_new') }}">Add a new Music</a></h1><br />
+                <h1>Favs</h1><br />
             </div>
         </div>
         <ul class="media-list">
-            {% for music in userMusics %}
+            {% for music in favMusics %}
                 <li class="media">
                     <div class="container">
                         <div class="row">
@@ -17,7 +17,7 @@
                                     <img class="media-object cover-size img-circle" src="{{ asset('uploads/musics/covers/') }}{{ music.musicFiles.coverPath }}" />
                                 </a>
                                 <div class="media-body">
-                                    <h3 class="media-heading">{{ music.title|title }} - <em><a href="{{ path('user_show', {'id' : music.user.id}) }}">{{ music.user.username }}</a></em> <small>({{ music.convertDuration() }})</small></h3>
+                                    <h3 class="media-heading">{{ music.title|title }} - <em>{{ music.user.username }}</em> <small>({{ music.convertDuration() }})</small></h3>
                                     {% if music.album is not null %}
                                         <p>
                                             From <strong><small>{{ music.album|upper }}</small></strong> album. <br />
@@ -29,24 +29,14 @@
                             <div class="col-md-3">
                                 <a class="btn btn-xs btn-info tooltip-info" href="{{ path('music_show', {'id' : music.id}) }}"
                                    data-toggle="tooltip" data-placement="right" title="Play it !">
-                                        <span class="glyphicon glyphicon-play"></span>
+                                    <span class="glyphicon glyphicon-play"></span>
                                 </a><br/>
-                                {% if app.user.haveFav(music) == 1 %}
-                                    <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
-                                        <button type="submit" class="btn btn-xs btn-danger tooltip-info"
-                                                data-toggle="tooltip" data-placement="right" title="remove from Favs">
-                                            <i class="glyphicon glyphicon-remove"></i>
-                                        </button>
-                                    </form>
-                                {% else %}
-                                    <form action="{{ path('user_addfav', {'id' : music.id}) }}" method="post">
-                                        <button type="submit" class="btn btn-xs btn-info tooltip-info"
-                                                data-toggle="tooltip" data-placement="right" title="Add to Favs">
-                                            <i class="glyphicon glyphicon-heart"></i>
-                                        </button>
-                                    </form>
-                                {% endif %}
-                                <a class="btn btn-xs btn-warning tooltip-info" href="{{ path('music_edit', { 'id': music.id }) }}" data-toggle="tooltip" data-placement="right" title="Edit Music"><span class="glyphicon glyphicon-pencil"></span></a><br/>
+                                <form action="{{ path('user_removefav', {'id' : music.id}) }}" method="post">
+                                    <button type="submit" class="btn btn-xs btn-danger tooltip-info"
+                                            data-toggle="tooltip" data-placement="right" title="remove from Favs">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
