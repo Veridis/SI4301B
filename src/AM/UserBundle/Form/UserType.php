@@ -24,10 +24,12 @@ class UserType extends AbstractType
             $form = $event->getForm();
 
             $form->add('username', 'text', array(
+                'read_only' => (null === $user->getId()) ? false : true,
+                'data' => (null === $user->getId()) ? '' : $user->getUsername(),
                 'attr' => array(
                     'class' => 'form-control',
-                    'placeholder' => 'Artist name, band name ...',
-                    'disabled' => (null === $user->getId()) ? false : true
+                    'placeholder' => 'Artist name, Band name...',
+                    'value' => (null === $user->getId()) ? '' : $user->getUsername(),
                 )
             ));
         });
