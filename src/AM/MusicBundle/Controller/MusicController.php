@@ -139,7 +139,6 @@ class MusicController extends Controller
         $commentForm = $this->createCreateCommentForm($comment);
         $commentForm->handleRequest($request);
 
-
         if ($commentForm->isValid()) {
             $user = $this->getUser();
             if(!($user instanceof User)) {

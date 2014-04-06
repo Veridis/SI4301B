@@ -28,17 +28,19 @@ class UserRepository extends EntityRepository
         return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
-    public function findFavWithMusics($userId)
+    public function findFavsWithMusicFiles($userId)
     {
         $qb = $this->createQueryBuilder('user')
             ->leftJoin('user.favMusics', 'favMusics')
             ->addSelect('favMusics')
-            ->leftJoin('favMusics.musicFiles','musicFiles')
+            ->leftJoin('favMusics.musicFiles', 'musicFiles')
             ->addSelect('musicFiles')
+            ->leftJoin('favMusics.user', 'musicUser')
+            ->addSelect('musicUser')
             ->where('user.id = :userId')
             ->setParameter('userId', $userId)
         ;
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 } 

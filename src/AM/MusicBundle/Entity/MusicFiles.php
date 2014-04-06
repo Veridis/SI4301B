@@ -199,7 +199,7 @@ class MusicFiles
             if($this->coverPath != self::DEFAULT_COVER)
                 $fs->remove($this->getCoverWebPath());
         } catch (IOException $e) {
-            var_dump($this->getSongWebPath());
+            var_dump($e->getMessage());
             die();
         }
     }

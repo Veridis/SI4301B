@@ -238,9 +238,12 @@ class UserController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        $favMusics = $em->getRepository('AMMusicBundle:Music')->findFavWithMusics($user->getId());
+        $user = $em->getRepository('AMUserBundle:User')->findFavsWithMusicFiles($user->getId());
 
-        return array('favMusics' => $favMusics);
+        if(!$user) {
+            throw $this->createNotFoundException('Unable to find User');
+        }
+        return array('user' => $user);
     }
 
     /**
